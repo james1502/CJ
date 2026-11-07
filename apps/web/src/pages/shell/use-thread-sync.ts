@@ -131,6 +131,7 @@ export function useThreadSync({
     computerOpenRef,
     computerBotIdRef,
     refreshComputerScreen,
+    isOwnControlEvent,
   } = computerState;
   const threadRefreshEpoch = useRef(0);
   const groupRefreshEpoch = useRef(0);
@@ -410,7 +411,10 @@ export function useThreadSync({
           if (event.type === "computer.takeover.granted" && computerRef.current?.shared) {
             void snapshotRefresh.invalidate().catch(() => undefined);
           }
-          void refreshComputerScreen(active.id).catch(() => undefined);
+          // This tab's own take or release already reads the new screen when its call returns.
+          if (!isOwnControlEvent(active.id, event.type, event.payload.leaseId)) {
+            void refreshComputerScreen(active.id).catch(() => undefined);
+          }
         }
         if (isRunTerminalEvent(event)) refreshRoutineHistory(event.runId);
       },

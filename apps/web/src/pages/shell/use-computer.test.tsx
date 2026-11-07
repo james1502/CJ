@@ -359,6 +359,64 @@ it("keeps a newer read's answer when the hung reconnect read runs out of time", 
   expect(state.screenLoadError).toBeNull();
 });
 
+it("lets this tab's own take or release skip one matching live event", () => {
+  state.expectOwnControlEvent("bot-1", "computer.takeover.granted");
+  expect(state.isOwnControlEvent("bot-2", "computer.takeover.granted")).toBe(false);
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.released")).toBe(false);
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.granted")).toBe(true);
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.granted")).toBe(false);
+  state.expectOwnControlEvent("bot-1", "computer.takeover.released");
+  vi.advanceTimersByTime(10_001);
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.released")).toBe(false);
+  // A takeover that returned an existing lease sent no event; a later lease's event still reads.
+  state.expectOwnControlEvent("bot-1", "computer.takeover.granted", "lease-1");
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.granted", "lease-2")).toBe(false);
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.granted", "lease-1")).toBe(true);
+  // A release that sent no event is forgotten once someone else's grant arrives.
+  state.expectOwnControlEvent("bot-1", "computer.takeover.released");
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.granted", "lease-3")).toBe(false);
+  expect(state.isOwnControlEvent("bot-1", "computer.takeover.released", "lease-3")).toBe(false);
+});
+
+it("still reads the screen when the refresh after this tab's release fails", async () => {
+  const release = vi.fn(async () => ({ ok: true as const }));
+  let controls!: ReturnType<typeof useComputerControls>;
+  function Controls() {
+    controls = useComputerControls({
+      rpc: { computer: { release, screenUrl } } as never,
+      state,
+      panel: "computer",
+      active: undefined,
+      bots: [],
+      botsRef: { current: [] },
+      activeBotId: { current: "bot-1" },
+      activeGroupId: { current: undefined },
+      runStatus: undefined,
+      sandboxProvider: undefined,
+      refreshThread: vi.fn(async () => {
+        throw new Error("offline");
+      }),
+      refreshGroupThread: vi.fn(),
+      onUpgrade: vi.fn(),
+    });
+    return null;
+  }
+  await act(async () =>
+    root.render(
+      <>
+        <Harness />
+        <Controls />
+      </>,
+    ),
+  );
+  screenUrl.mockClear();
+  await act(async () => {
+    await controls.releaseComputer();
+  });
+  expect(release).toHaveBeenCalledWith({ botId: "bot-1", reason: undefined });
+  expect(screenUrl).toHaveBeenCalledTimes(1);
+});
+
 it("closes the computer view on Escape, but not on the Escape that ends an IME composition", async () => {
   function Controls() {
     state = useComputerState({
