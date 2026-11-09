@@ -948,6 +948,7 @@ async function transcribeClip(
   signal: AbortSignal,
   requestContext: ApiRequestContext,
 ): Promise<string> {
+  await ensureVoiceConsent(requestContext);
   const { apiBase, headers } = requestContext;
   const res = await fetchServer(
     `${apiBase}/api/voice/transcribe`,
