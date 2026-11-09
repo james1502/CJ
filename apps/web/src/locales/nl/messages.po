@@ -5042,6 +5042,7 @@ msgstr "{0} openen"
 msgid "Open {name}"
 msgstr "{name} openen"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 msgid "Open {title}"
 msgstr "{title} openen"
@@ -5158,6 +5159,7 @@ msgstr "Uitvoer"
 msgid "Owner"
 msgstr "Eigenaar"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 msgid "Page"
@@ -7075,6 +7077,7 @@ msgstr "De computeruren van deze maand zijn op."
 msgid "This page couldn't be shown."
 msgstr "Deze pagina kon niet worden weergegeven."
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 #: src/components/pages/PageViewHost.tsx

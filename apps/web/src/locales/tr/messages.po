@@ -5042,6 +5042,7 @@ msgstr "{0} aç"
 msgid "Open {name}"
 msgstr "{name} öğesini aç"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 msgid "Open {title}"
 msgstr "{title} aç"
@@ -5158,6 +5159,7 @@ msgstr "Çıktı"
 msgid "Owner"
 msgstr "Sahip"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 msgid "Page"
@@ -7075,6 +7077,7 @@ msgstr "Bu ayın bilgisayar saatleri tükendi."
 msgid "This page couldn't be shown."
 msgstr "Bu sayfa gösterilemedi."
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 #: src/components/pages/PageViewHost.tsx

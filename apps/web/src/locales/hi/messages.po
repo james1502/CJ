@@ -5042,6 +5042,7 @@ msgstr "{0} खोलें"
 msgid "Open {name}"
 msgstr "{name} खोलें"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 msgid "Open {title}"
 msgstr "{title} खोलें"
@@ -5158,6 +5159,7 @@ msgstr "आउटपुट"
 msgid "Owner"
 msgstr "मालिक"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 msgid "Page"
@@ -7075,6 +7077,7 @@ msgstr "इस महीने के कंप्यूटर घंटे ख�
 msgid "This page couldn't be shown."
 msgstr "यह पेज दिखाया नहीं जा सका।"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 #: src/components/pages/PageViewHost.tsx

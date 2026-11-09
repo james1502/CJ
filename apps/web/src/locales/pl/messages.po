@@ -5042,6 +5042,7 @@ msgstr "Otwórz {0}"
 msgid "Open {name}"
 msgstr "Otwórz {name}"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 msgid "Open {title}"
 msgstr "Otwórz {title}"
@@ -5158,6 +5159,7 @@ msgstr "Dane wyjściowe"
 msgid "Owner"
 msgstr "Właściciel"
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 msgid "Page"
@@ -7075,6 +7077,7 @@ msgstr "Godziny pracy komputera na ten miesiąc zostały wykorzystane."
 msgid "This page couldn't be shown."
 msgstr "Nie udało się wyświetlić tej strony."
 
+#: src/components/pages/InlineHtmlPage.tsx
 #: src/components/pages/PageCard.tsx
 #: src/components/pages/PageView.tsx
 #: src/components/pages/PageViewHost.tsx
