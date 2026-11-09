@@ -7,6 +7,7 @@ import remarkParse from "remark-parse";
 import { unified } from "unified";
 import { blocksToAgentHistoryText } from "./attachments.js";
 import { replyAttachment } from "./message-replies.js";
+import { emailDisplayText } from "./message-text.js";
 
 const markdownParser = unified().use(remarkParse).use(remarkGfm);
 /** Past this much source text in one message, quote derivation refuses to run. */
@@ -94,18 +95,23 @@ export function deriveMessageQuote(
   const hint = normalizeWithOffsets(truncateReplyQuote(quoteHint.trim())).text;
   if (!hint) return undefined;
 
-  const textBlocks = blocks.filter(
-    (block): block is Extract<MessageBlock, { kind: "text" }> => block.kind === "text",
+  // An owner's email is shown as plain text, whatever the format of the message's text blocks.
+  const sources = blocks.flatMap((block) =>
+    block.kind === "text"
+      ? [{ text: block.text, markdown: format === "markdown" }]
+      : block.kind === "email"
+        ? [{ text: emailDisplayText(block), markdown: false }]
+        : [],
   );
   let sourceLength = 0;
-  for (const block of textBlocks) {
-    sourceLength += block.text.length;
+  for (const source of sources) {
+    sourceLength += source.text.length;
     if (sourceLength > MAX_QUOTABLE_SOURCE_LENGTH) return undefined;
   }
 
-  for (const block of textBlocks) {
+  for (const source of sources) {
     const visible = (
-      format === "markdown" ? visibleTextFromMarkdown(block.text) : block.text
+      source.markdown ? visibleTextFromMarkdown(source.text) : source.text
     ).normalize("NFC");
     const canonical = normalizeWithOffsets(visible);
     const match = canonical.text.indexOf(hint);
@@ -154,6 +160,8 @@ function replyBlockText(block: MessageBlock): string {
     case "bot_message_sent":
     case "bot_message_received":
       return block.text;
+    case "email":
+      return emailDisplayText(block);
     case "choice":
       return block.question;
     case "card":

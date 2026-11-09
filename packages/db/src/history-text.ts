@@ -13,6 +13,8 @@ export function historyMessageText(blocks: Prisma.JsonValue): string {
   return objectBlocks(blocks)
     .flatMap((block) => {
       if (block.kind === "subagent") return [block.task, block.result ?? ""].filter(Boolean);
+      // The subject can carry the whole request.
+      if (block.kind === "email") return [block.subject, block.text].filter(Boolean);
       return [
         "text",
         "channel_message",

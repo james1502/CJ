@@ -285,6 +285,8 @@ export async function deliverWebhookEvent(
   target: InboundTarget,
   input: {
     prompt: string;
+    /** Shown in the chat in place of the prompt; the model reads it as the prompt (history too). */
+    display?: Extract<MessageBlock, { kind: "email" }>;
     artifacts?: Array<{ id: string; name: string; mimeType: string; size: number }>;
     routines: Array<{
       name: string;
@@ -326,7 +328,7 @@ export async function deliverWebhookEvent(
     botId: target.bot.id,
     userId: target.bot.userId,
     blocks: [
-      { kind: "text", text: promptText },
+      input.display ?? { kind: "text", text: promptText },
       ...(input.artifacts ?? []).map(messageBlockForArtifact),
     ],
     prompt: promptText,
