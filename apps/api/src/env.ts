@@ -127,6 +127,7 @@ export interface AppEnv {
   emailProvider?: string;
   welcomeEmailEnabled?: boolean;
   emailApiKey?: string;
+  emailAccountId?: string;
   emailFrom: string | undefined;
   emailReplyTo?: string;
   /** Mail to bots' addresses, posted by a relay; off unless the domain and secret are both set. */
@@ -315,6 +316,7 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
     smtpUrl: optional(source.SMTP_URL),
     emailProvider: optional(source.EMAIL_PROVIDER),
     emailApiKey: optional(source.EMAIL_API_KEY),
+    emailAccountId: optional(source.EMAIL_ACCOUNT_ID),
     emailFrom: optional(source.EMAIL_FROM),
     emailReplyTo: optional(source.EMAIL_REPLY_TO),
     inboundEmail: inboundEmailFromEnv(source),
