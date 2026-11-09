@@ -676,6 +676,14 @@ function SpaceShell() {
     }
   }, [active, initialBotsLoaded, shellReady, snapshot?.botId]);
 
+  const chatFollowKey = inGroup ? groupId : active?.id;
+  const [threadFollowRequest, setThreadFollowRequest] = useState(0);
+  useLayoutEffect(() => {
+    if (!chatFollowKey) return;
+    if (searchParams.get("m")) return;
+    setThreadFollowRequest((value) => value + 1);
+  }, [chatFollowKey]);
+
   const { scrollRequest, clearScrollRequest, jumpToReplyMessage } = useMessageJump({
     rpc,
     queries,
@@ -1090,7 +1098,7 @@ function SpaceShell() {
               scrollRef={thread.messageScroll}
               scrollRequest={scrollRequest}
               onScrollRequestHandled={clearScrollRequest}
-              followRequest={composer.sentCount}
+              followRequest={composer.sentCount + threadFollowRequest}
               artifactTarget={transcriptArtifactTarget}
               markedUnreadMessageId={read.markedUnreadMessageId}
               transcript={transcript}

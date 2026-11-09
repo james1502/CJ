@@ -212,6 +212,13 @@ export function useMessageJump({
     transcriptRef.current = transcript;
   }, [transcript]);
 
+  // Clear before the initial-scroll layout effect so a same-id bot object
+  // replacement cannot re-snap a reader who already scrolled away from the tail.
+  useLayoutEffect(() => {
+    if (searchParamsRef.current.get("m")) return;
+    initiallyScrolledThread.current = null;
+  }, [active?.id, groupId, inGroup]);
+
   useLayoutEffect(() => {
     const pin = pinnedAroundRef.current;
     if (inGroup) {
