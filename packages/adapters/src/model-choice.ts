@@ -2,6 +2,7 @@ import type { Actor } from "@rakazo/contracts";
 import { canonicalPiProviderId } from "@rakazo/contracts";
 import type { BotModelChangeDeps } from "./model-selection.js";
 import { modelCredentialAuthKindsForSpace } from "./model-selection.js";
+import { compareVersions } from "./model-version.js";
 import { listAvailablePiCatalog } from "./pi-catalog-availability.js";
 import type { PiCatalogEntry } from "./pi-models.js";
 import { listPiCatalog, offeredCatalog } from "./pi-models.js";
@@ -54,16 +55,8 @@ export function words(text: string): string[] {
 }
 
 const isVersion = (word: string) => /^\d/.test(word);
-
-function compareVersions(left: string | undefined, right: string | undefined): number {
-  const a = (left ?? "").split(".").map(Number);
-  const b = (right ?? "").split(".").map(Number);
-  for (let index = 0; index < Math.max(a.length, b.length); index++) {
-    const diff = (a[index] ?? -1) - (b[index] ?? -1);
-    if (diff) return diff;
-  }
-  return 0;
-}
+/** The catalog's "(latest)" marker names the newest release, not a variant like "Lite". */
+const isMarker = (word: string) => word === "latest";
 
 /**
  * Match a model name as people say it ("Claude Sonnet", "gemini flash") or an exact id
@@ -99,7 +92,9 @@ export function matchModelChoice(
       : [];
   const preferred = preferredProvider ? canonicalPiProviderId(preferredProvider) : undefined;
   const unsaid = (choice: ModelChoice) =>
-    words(choice.label).filter((word) => !isVersion(word) && !asked.includes(word)).length;
+    words(choice.label).filter(
+      (word) => !isVersion(word) && !isMarker(word) && !asked.includes(word),
+    ).length;
   const version = (choice: ModelChoice) => words(choice.label).find(isVersion);
   const order = (a: ModelChoice, b: ModelChoice) =>
     Number(b.provider === preferred) - Number(a.provider === preferred) ||
