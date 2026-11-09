@@ -18,6 +18,7 @@ vi.mock("../../lib/rpc", () => {
       restoreInstructions: vi.fn(),
       // This server receives no email, so the panel offers no address.
       emailAddress: vi.fn(async () => null),
+      modelConnection: vi.fn(async () => ({ credentialId: null, pinned: false })),
     },
     voice: { voices: vi.fn().mockResolvedValue([]) },
     models: {
@@ -434,6 +435,183 @@ describe("BotSettings thinking options", () => {
     expect(model.value).toBe("openai-compatible::beta");
     if (!(thinking instanceof HTMLSelectElement)) throw new Error("Missing thinking select");
     expect([...thinking.options].map((option) => option.value)).toEqual(["", "low", "high"]);
+  });
+
+  it("lists each connection's models and saves the chosen connection with the model", async () => {
+    i18n.load("en", {});
+    i18n.activate("en");
+    const connection = { provider: "anthropic", hasKey: true, isDefault: false };
+    vi.mocked(rpc.models.credentials).mockResolvedValue([
+      { ...connection, id: "sub", label: "Claude subscription" },
+      { ...connection, id: "api", label: "Anthropic API key" },
+    ]);
+    vi.mocked(rpc.models.list).mockResolvedValue([
+      {
+        provider: "anthropic",
+        providerName: "Anthropic",
+        id: "claude-opus",
+        label: "Claude Opus",
+        billing: "",
+      },
+    ]);
+    vi.mocked(rpc.bots.modelConnection).mockResolvedValue({ credentialId: "sub", pinned: false });
+    await render("Billing", { modelProvider: "anthropic", modelId: "claude-opus" });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    await act(async () =>
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="bot-settings-advanced"] button')!
+        .click(),
+    );
+    await act(async () => {
+      await Promise.resolve();
+    });
+    const model = container.querySelector('[id$="-model"]');
+    if (!(model instanceof HTMLSelectElement)) throw new Error("Missing model select");
+    const [sub, api] = ["sub", "api"].map((id) => `${id}@@anthropic::claude-opus`);
+    expect([...model.options].map((option) => option.value)).toEqual(["", sub, api]);
+    expect(model.value).toBe(sub);
+    expect(model.selectedOptions[0]?.text).toContain("Claude subscription");
+    expect(container.querySelector('[id$="-connection"]')).toBeNull();
+
+    await act(async () => {
+      model.value = api!;
+      model.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    const save = [...container.querySelectorAll("button")].find(
+      (button) => button.textContent === "Save",
+    );
+    if (!save) throw new Error("Missing save button");
+    await act(async () => save.click());
+
+    expect(onSave.mock.lastCall?.[0]).toMatchObject({
+      modelProvider: "anthropic",
+      modelId: "claude-opus",
+      modelConnectionId: "api",
+    });
+    vi.mocked(rpc.models.credentials).mockResolvedValue([]);
+    vi.mocked(rpc.models.list).mockResolvedValue([]);
+    vi.mocked(rpc.bots.modelConnection).mockResolvedValue({ credentialId: null, pinned: false });
+  });
+
+  it("removes a saved connection when the funded row for the same model is picked", async () => {
+    i18n.load("en", {});
+    i18n.activate("en");
+    const connection = { provider: "anthropic", hasKey: true, isDefault: false };
+    const opus = {
+      provider: "anthropic",
+      providerName: "Anthropic",
+      id: "claude-opus",
+      label: "Claude Opus",
+      billing: "",
+    };
+    vi.mocked(rpc.models.credentials).mockResolvedValue([
+      { ...connection, id: "sub", label: "Claude subscription" },
+      { ...connection, id: "api", label: "Anthropic API key" },
+    ]);
+    vi.mocked(rpc.models.list).mockResolvedValue([opus, { ...opus, managed: true }]);
+    vi.mocked(rpc.bots.modelConnection).mockResolvedValue({ credentialId: "sub", pinned: true });
+    await render("Billing", { modelProvider: "anthropic", modelId: "claude-opus" });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    await act(async () =>
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="bot-settings-advanced"] button')!
+        .click(),
+    );
+    await act(async () => {
+      await Promise.resolve();
+    });
+    const model = container.querySelector('[id$="-model"]') as HTMLSelectElement;
+    expect(model.value).toBe("sub@@anthropic::claude-opus");
+
+    await act(async () => {
+      model.value = "anthropic::claude-opus";
+      model.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    expect(model.value).toBe("anthropic::claude-opus");
+    const save = [...container.querySelectorAll("button")].find(
+      (button) => button.textContent === "Save",
+    );
+    if (!save) throw new Error("Missing save button");
+    expect(save.disabled).toBe(false);
+    await act(async () => save.click());
+
+    expect(onSave.mock.lastCall?.[0]).toMatchObject({ modelConnectionId: null });
+    vi.mocked(rpc.models.credentials).mockResolvedValue([]);
+    vi.mocked(rpc.models.list).mockResolvedValue([]);
+    vi.mocked(rpc.bots.modelConnection).mockResolvedValue({ credentialId: null, pinned: false });
+  });
+
+  it("asks again which connection runs the bot when another session changes its model", async () => {
+    i18n.load("en", {});
+    i18n.activate("en");
+    await render("Billing", { modelProvider: "anthropic", modelId: "claude-opus" });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    vi.mocked(rpc.bots.modelConnection).mockClear();
+
+    await render("Billing", { modelProvider: "anthropic", modelId: "claude-sonnet" });
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(rpc.bots.modelConnection).toHaveBeenCalledTimes(1);
+  });
+
+  it("clears a thinking level the newly picked connection does not offer", async () => {
+    i18n.load("en", {});
+    i18n.activate("en");
+    const connection = { provider: "anthropic", hasKey: true, isDefault: false };
+    vi.mocked(rpc.models.credentials).mockResolvedValue([
+      { ...connection, id: "sub", label: "Claude subscription", thinkingLevels: ["off", "high"] },
+      { ...connection, id: "api", label: "Anthropic API key", thinkingLevels: ["off", "low"] },
+    ]);
+    vi.mocked(rpc.models.list).mockResolvedValue([
+      {
+        provider: "anthropic",
+        providerName: "Anthropic",
+        id: "claude-opus",
+        label: "Claude Opus",
+        billing: "",
+      },
+    ]);
+    vi.mocked(rpc.bots.modelConnection).mockResolvedValue({ credentialId: "sub", pinned: true });
+    await render("Billing", {
+      modelProvider: "anthropic",
+      modelId: "claude-opus",
+      thinkingLevel: "high",
+    });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    await act(async () =>
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="bot-settings-advanced"] button')!
+        .click(),
+    );
+    await act(async () => {
+      await Promise.resolve();
+    });
+    const model = container.querySelector('[id$="-model"]') as HTMLSelectElement;
+    const thinking = () => container.querySelector('[id$="-thinking"]') as HTMLSelectElement;
+    expect([...thinking().options].map((option) => option.value)).toContain("high");
+
+    await act(async () => {
+      model.value = "api@@anthropic::claude-opus";
+      model.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    const offered = [...thinking().options].map((option) => option.value);
+    expect(offered).toContain("low");
+    expect(offered).not.toContain("high");
+    expect(thinking().value).not.toBe("high");
+    vi.mocked(rpc.models.credentials).mockResolvedValue([]);
+    vi.mocked(rpc.models.list).mockResolvedValue([]);
+    vi.mocked(rpc.bots.modelConnection).mockResolvedValue({ credentialId: null, pinned: false });
   });
 });
 
