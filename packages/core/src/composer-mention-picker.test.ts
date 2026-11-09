@@ -80,6 +80,18 @@ describe("resolveMentionPickerKey", () => {
     ).toEqual({ type: "complete", index: 0 });
   });
 
+  it("leaves modified Tab, arrows and Escape to the field and app shortcuts", () => {
+    for (const modifier of ["ctrlKey", "metaKey", "altKey"] as const)
+      for (const key of ["Tab", "ArrowDown", "ArrowUp", "Escape"])
+        expect(
+          resolveMentionPickerKey({ key, [modifier]: true, optionCount: 2, highlightedIndex: 0 }),
+        ).toEqual({ type: "none" });
+    for (const key of ["ArrowDown", "ArrowUp", "Escape"])
+      expect(
+        resolveMentionPickerKey({ key, shiftKey: true, optionCount: 2, highlightedIndex: 0 }),
+      ).toEqual({ type: "none" });
+  });
+
   it("does not send on Shift+Enter when the picker is closed", () => {
     expect(
       resolveMentionPickerKey({
