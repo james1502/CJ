@@ -1,3 +1,4 @@
+import { signInProviders } from "@rakazo/contracts";
 import {
   credentialIssue,
   MAX_PASSWORD_LENGTH,
@@ -21,6 +22,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeActionButton } from "../components/native-action-button";
+import { SocialSignInButtons } from "../components/social-sign-in-buttons";
 import { FORM_COLUMN_WIDTH } from "../lib/adaptive-layout";
 import { currentApiBase, rpc } from "../lib/api";
 import type { PasswordResetCapabilities } from "../lib/api-auth";
@@ -32,6 +34,7 @@ import {
   signInWithCode,
   signUp,
 } from "../lib/api-auth";
+import { continueWithNativeSignIn } from "../lib/apple-sign-in";
 import type { AuthMode } from "../lib/auth-routing";
 import { initialAuthMode } from "../lib/auth-routing";
 import { displayApiHost, usesCustomApiBase } from "../lib/endpoint";
@@ -69,10 +72,12 @@ export default function SignIn() {
   const [resetSent, setResetSent] = useState(false);
   const [code, setCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
+  const [emailStep, setEmailStep] = useState(false);
   const [passkeys, setPasskeys] = useState(false);
 
   useEffect(() => {
     setPasswordVisible(false);
+    setEmailStep(false);
   }, [mode, apiBase]);
 
   useFocusEffect(
@@ -138,10 +143,16 @@ export default function SignIn() {
   }
   if (hasSession) return <Redirect href={hasIncomingShare() ? "/share" : "/"} />;
 
+  const providers = reset ? signInProviders(reset) : [];
+  const primaryProvider = reset && !reset.passwordAuth ? providers[0] : undefined;
+  const linkProviders = primaryProvider ? providers.slice(1) : providers;
   const codeFlow = Boolean(reset?.passwordAuth && reset.emailCode && mode !== "forgot");
   // A blank password asks for an emailed code, so code-only accounts need no toggle.
   const usingCode = codeFlow && (codeSent || !password);
   const codeStep = codeFlow && codeSent;
+  const chooser = Boolean(
+    reset?.passwordAuth && providers.length > 0 && !emailStep && mode !== "forgot" && !codeStep,
+  );
 
   async function submit(enteredCode = code) {
     if (pending || !reset?.passwordAuth) return;
@@ -217,6 +228,13 @@ export default function SignIn() {
     if (hasIncomingShare()) return router.replace("/share");
     const me = await rpc("me").catch(() => null);
     router.replace(me?.needsSignupSurvey ? "/signup-survey" : "/");
+  }
+
+  function startProvider(provider: (typeof providers)[number]) {
+    const native = Boolean(provider.native) && Platform.OS === "ios";
+    return externalSignIn(() =>
+      native ? continueWithNativeSignIn(provider.id) : continueWithSso("sign-in", provider.id),
+    );
   }
 
   async function externalSignIn(run: () => Promise<boolean>) {
@@ -305,12 +323,22 @@ export default function SignIn() {
                       style={{ marginTop: 16 }}
                     />
                   ) : null}
-                  {reset?.sso && !reset.passwordAuth && mode !== "forgot" ? (
+                  {primaryProvider && mode !== "forgot" ? (
                     <NativeActionButton
-                      label={t("Continue with {name}", { name: reset.sso.name })}
+                      label={t("Continue with {name}", { name: primaryProvider.name })}
                       disabled={pending}
-                      onPress={() => void externalSignIn(continueWithSso)}
+                      onPress={() => void startProvider(primaryProvider)}
                       style={{ marginTop: 16 }}
+                    />
+                  ) : null}
+                  {!reset?.passwordAuth && mode !== "forgot" ? (
+                    <SocialSignInButtons
+                      providers={linkProviders}
+                      disabled={pending}
+                      onPress={(providerId) => {
+                        const provider = linkProviders.find((item) => item.id === providerId);
+                        if (provider) void startProvider(provider);
+                      }}
                     />
                   ) : null}
                   {error && !reset?.passwordAuth ? (
@@ -369,8 +397,48 @@ export default function SignIn() {
                         style={{ alignSelf: "center", marginTop: 16 }}
                       />
                     </>
+                  ) : chooser ? (
+                    <>
+                      <SocialSignInButtons
+                        providers={providers}
+                        disabled={pending}
+                        onEmail={() => {
+                          setError(null);
+                          setEmailStep(true);
+                        }}
+                        onPress={(providerId) => {
+                          const provider = providers.find((item) => item.id === providerId);
+                          if (provider) void startProvider(provider);
+                        }}
+                      />
+                      {error ? (
+                        <Text
+                          accessibilityRole="alert"
+                          style={{ color: tokens.destructive, marginTop: 12 }}
+                        >
+                          {error}
+                        </Text>
+                      ) : null}
+                    </>
                   ) : reset?.passwordAuth ? (
                     <>
+                      {providers.length > 0 && mode !== "forgot" && !codeStep ? (
+                        <Pressable
+                          accessibilityRole="button"
+                          hitSlop={8}
+                          onPress={() => {
+                            setError(null);
+                            setEmailStep(false);
+                          }}
+                          style={{ alignSelf: "flex-start", marginTop: 8 }}
+                        >
+                          <Text
+                            style={{ color: tokens.foreground, fontSize: 15, fontWeight: "600" }}
+                          >
+                            {t("Back")}
+                          </Text>
+                        </Pressable>
+                      ) : null}
                       {mode === "up" ? (
                         <TextInput
                           autoComplete="name"
@@ -379,7 +447,7 @@ export default function SignIn() {
                           value={name}
                           onChangeText={setName}
                           style={{
-                            marginTop: 28,
+                            marginTop: providers.length > 0 && mode !== "forgot" ? 12 : 28,
                             backgroundColor: tokens.muted,
                             borderRadius: 13,
                             padding: 16,
@@ -400,7 +468,8 @@ export default function SignIn() {
                         }}
                         onBlur={() => setEmailBlurred(true)}
                         style={{
-                          marginTop: mode === "up" ? 12 : 28,
+                          marginTop:
+                            mode === "up" || (mode !== "forgot" && providers.length > 0) ? 12 : 28,
                           backgroundColor: tokens.muted,
                           borderRadius: 13,
                           padding: 16,
@@ -497,15 +566,6 @@ export default function SignIn() {
                           disabled={pending}
                           onPress={() => void externalSignIn(signInWithPasskey)}
                           style={{ marginTop: 12 }}
-                        />
-                      ) : null}
-                      {reset.sso && mode !== "forgot" ? (
-                        <NativeActionButton
-                          label={t("Continue with {name}", { name: reset.sso.name })}
-                          prominence="quiet"
-                          disabled={pending}
-                          onPress={() => void externalSignIn(continueWithSso)}
-                          style={{ alignSelf: "center", marginTop: 16 }}
                         />
                       ) : null}
                       {mode === "in" && reset?.passwordReset && reset.resetUrl ? (

@@ -145,25 +145,65 @@ it("retries failed capabilities without exposing a password form", async () => {
   expect(fetchAuthCapabilities).toHaveBeenCalledTimes(2);
   expect(host.textContent).toContain("Continue with Example");
 });
-it.each(["in", "up"] as const)("puts quiet SSO below the primary action on %s", async (mode) => {
+it.each(["in", "up"] as const)("offers providers before the email form on %s", async (mode) => {
   vi.mocked(fetchAuthCapabilities).mockResolvedValue({ ...capabilities, passwordAuth: true });
   await render(mode);
-  const email = host.querySelector('input[name="email"]')!;
-  const password = host.querySelector('input[type="password"]')!;
-  const submit = host.querySelector('button[type="submit"]')!;
-  const sso = [...host.querySelectorAll("button")].find(
-    (button) => button.textContent === "Continue with Example",
-  )!;
-  for (const [first, second] of [
-    [email, password],
-    [password, submit],
-    [submit, sso],
-  ] as const) {
-    expect(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  }
-  expect(submit.getAttribute("data-variant")).toBe("default");
-  expect(sso.dataset.variant).toBe("link");
-  expect(sso.dataset.size).toBe("sm");
+  const provider = button("Example");
+  const emailChoice = button("Continue with email");
+  expect(host.querySelector('input[name="email"]')).toBeNull();
+  expect(provider.dataset.variant).toBe("outline");
+  expect(provider.className).toContain("flex-1");
+  expect(emailChoice.className).toContain("w-full");
+  expect(
+    provider.compareDocumentPosition(emailChoice) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  await act(async () => emailChoice.click());
+  expect(host.querySelector('input[name="email"]')).not.toBeNull();
+  expect(button("Back")).toBeDefined();
+  await act(async () => button("Back").click());
+  expect(host.querySelector('input[name="email"]')).toBeNull();
+  expect(button("Example")).toBeDefined();
+});
+
+it("shows a configured provider beside the password form and hides the rest", async () => {
+  vi.mocked(fetchAuthCapabilities).mockResolvedValue({
+    ...capabilities,
+    passwordAuth: true,
+    sso: null,
+    providers: [
+      { id: "google", name: "Google" },
+      { id: "apple", name: "Apple", native: true },
+    ],
+  });
+  await render();
+  expect(host.querySelector('input[name="email"]')).toBeNull();
+  const google = button("Google");
+  const apple = button("Apple");
+  const emailChoice = button("Continue with email");
+  expect(google.dataset.variant).toBe("outline");
+  expect(apple.dataset.variant).toBe("outline");
+  expect(google.className).not.toContain("bg-black");
+  expect(apple.className).not.toContain("bg-black");
+  expect(google.parentElement).toBe(apple.parentElement);
+  expect(google.parentElement?.className).toContain("flex");
+  expect(google.querySelector("svg")).not.toBeNull();
+  expect(apple.querySelector("svg")).not.toBeNull();
+  expect(emailChoice.className).toContain("w-full");
+  await act(async () => google.click());
+  expect(authClient.signIn.social).toHaveBeenCalledWith(
+    expect.objectContaining({ provider: "google" }),
+  );
+  await act(async () => emailChoice.click());
+  expect(host.querySelector('input[name="email"]')).not.toBeNull();
+  vi.mocked(fetchAuthCapabilities).mockResolvedValue({
+    ...capabilities,
+    passwordAuth: true,
+    sso: null,
+    providers: [],
+  });
+  await render("up");
+  expect(host.textContent).not.toContain("Continue with");
+  expect(host.querySelector('input[name="email"]')).not.toBeNull();
 });
 
 it("hides SSO in password recovery", async () => {

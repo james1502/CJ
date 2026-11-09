@@ -1,4 +1,5 @@
 import { Trans, useLingui } from "@lingui/react/macro";
+import { signInProviders } from "@rakazo/contracts";
 import {
   credentialIssue,
   MAX_PASSWORD_LENGTH,
@@ -10,6 +11,7 @@ import { Button, Input, InputOTP, InputOTPGroup, InputOTPSlot, Label } from "@ra
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { PasskeySignIn } from "../components/PasskeySignIn";
+import { SocialSignInButtons } from "../components/SocialSignInButtons";
 import { authClient } from "../lib/auth";
 import type { AuthCapabilities } from "../lib/auth-capabilities";
 import { fetchAuthCapabilities } from "../lib/auth-capabilities";
@@ -54,10 +56,17 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
   const [capabilityAttempt, setCapabilityAttempt] = useState(0);
   const [codeSent, setCodeSent] = useState(false);
   const [code, setCode] = useState("");
+  const [emailStep, setEmailStep] = useState(false);
   const useCode = Boolean(reset?.passwordAuth && reset.emailCode) && mode !== "forgot";
   // A blank password asks for an emailed code, so code-only accounts need no toggle.
   const codeMode = useCode && !password;
   const codeStep = useCode && codeSent;
+  const providers = reset ? signInProviders(reset) : [];
+  const primaryProvider = reset && !reset.passwordAuth ? providers[0] : undefined;
+  const linkProviders = primaryProvider ? providers.slice(1) : providers;
+  const chooser = Boolean(
+    reset?.passwordAuth && providers.length > 0 && !emailStep && mode !== "forgot" && !codeStep,
+  );
   const passwordFieldId = mode === "in" ? "current-password" : "new-password";
   const title =
     sent || codeStep ? (
@@ -69,6 +78,10 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     ) : (
       <Trans>Reset your password</Trans>
     );
+
+  useEffect(() => {
+    setEmailStep(false);
+  }, [mode]);
 
   useEffect(() => {
     setReset(null);
@@ -207,14 +220,14 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     setError(null);
   }
 
-  async function signInWithSso() {
+  async function signInWithProvider(provider: string) {
     setError(null);
     try {
       const result = await runSsoFlow(
         (disableRedirect, callbackURL) =>
           authClient.signIn.social({
             disableRedirect,
-            provider: "oidc",
+            provider,
             newUserCallbackURL: callbackURL(newAccountDestination(next)),
             callbackURL: callbackURL(next ?? "/app"),
             errorCallbackURL: callbackURL("/sign-in"),
@@ -255,23 +268,62 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
               </Button>
             </div>
           ) : null}
-          {reset?.sso && !reset.passwordAuth && mode !== "forgot" ? (
+          {primaryProvider && mode !== "forgot" ? (
             <Button
               type="button"
               disabled={pending}
               className={submitClass}
-              onClick={() => void signInWithSso()}
+              onClick={() => void signInWithProvider(primaryProvider.id)}
             >
-              <Trans>Continue with {reset.sso.name}</Trans>
+              <Trans>Continue with {primaryProvider.name}</Trans>
             </Button>
+          ) : null}
+          {!reset?.passwordAuth && mode !== "forgot" ? (
+            <SocialSignInButtons
+              providers={linkProviders}
+              disabled={pending}
+              onPress={(providerId) => void signInWithProvider(providerId)}
+            />
           ) : null}
           {error && !reset?.passwordAuth ? (
             <p role="alert" className="mt-3 text-body text-destructive">
               {error}
             </p>
           ) : null}
-          {reset?.passwordAuth ? (
+          {chooser ? (
             <>
+              <SocialSignInButtons
+                providers={providers}
+                disabled={pending}
+                onPress={(providerId) => void signInWithProvider(providerId)}
+                onEmail={() => {
+                  setError(null);
+                  setEmailStep(true);
+                }}
+              />
+              {error ? (
+                <p role="alert" className="mt-3 w-full text-body text-destructive">
+                  {error}
+                </p>
+              ) : null}
+            </>
+          ) : null}
+          {reset?.passwordAuth && !chooser ? (
+            <>
+              {providers.length > 0 && mode !== "forgot" && !codeStep ? (
+                <Button
+                  type="button"
+                  variant="link"
+                  size="sm"
+                  className="mb-4 self-start px-0 text-muted-foreground"
+                  onClick={() => {
+                    setError(null);
+                    setEmailStep(false);
+                  }}
+                >
+                  <Trans>Back</Trans>
+                </Button>
+              ) : null}
               {mode === "up" && !codeStep ? (
                 <div className="mb-4 w-full">
                   <Label htmlFor="name" className="text-muted-foreground">
@@ -417,18 +469,6 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
                   onClick={leaveCodeStep}
                 >
                   <Trans>Back</Trans>
-                </Button>
-              ) : null}
-              {reset.sso && mode !== "forgot" && !codeStep ? (
-                <Button
-                  type="button"
-                  variant="link"
-                  size="sm"
-                  disabled={pending}
-                  className="mt-3 text-muted-foreground"
-                  onClick={() => void signInWithSso()}
-                >
-                  <Trans>Continue with {reset.sso.name}</Trans>
                 </Button>
               ) : null}
               {codeStep ? null : (

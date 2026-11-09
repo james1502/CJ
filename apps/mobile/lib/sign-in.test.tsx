@@ -14,6 +14,7 @@ import {
   signInWithCode,
   signUp,
 } from "./api-auth";
+import { continueWithNativeSignIn } from "./apple-sign-in";
 import type * as Endpoint from "./endpoint";
 import type { NativeActionButtonProps } from "./native-controls";
 import { passkeysAvailable, signInWithPasskey } from "./passkey";
@@ -115,7 +116,29 @@ vi.mock("../components/native-action-button", () => ({
     </button>
   ),
 }));
-vi.mock("./native", () => ({ useMobileTokens: () => tokensForAppearance("light") }));
+vi.mock("./native", () => ({
+  useMobileTokens: () => tokensForAppearance("light"),
+  useResolvedAppearance: () => "light",
+}));
+vi.mock("expo-apple-authentication", () => ({
+  AppleAuthenticationButton: ({
+    onPress,
+    accessibilityLabel,
+  }: {
+    onPress: () => void;
+    accessibilityLabel?: string;
+  }) => (
+    <button type="button" onClick={onPress}>
+      {accessibilityLabel}
+    </button>
+  ),
+  AppleAuthenticationButtonType: { CONTINUE: 1, SIGN_IN: 0, SIGN_UP: 2 },
+  AppleAuthenticationButtonStyle: { WHITE: 0, WHITE_OUTLINE: 1, BLACK: 2 },
+}));
+vi.mock("react-native-svg", () => ({
+  default: () => null,
+  Path: () => null,
+}));
 vi.mock("./i18n", () => ({
   useI18n: () => ({
     t: (text: string, values?: Record<string, string>) =>
@@ -146,6 +169,7 @@ vi.mock("./api-auth", () => ({
 }));
 vi.mock("./incoming-share", () => ({ hasIncomingShare: () => route.waiting }));
 vi.mock("./sso", () => ({ continueWithSso: vi.fn() }));
+vi.mock("./apple-sign-in", () => ({ continueWithNativeSignIn: vi.fn() }));
 vi.mock("./passkey", () => ({ passkeysAvailable: vi.fn(), signInWithPasskey: vi.fn() }));
 vi.mock("./user-error", () => ({ credentialIssueText: vi.fn(), errorText: vi.fn() }));
 
@@ -153,8 +177,9 @@ const capabilities = {
   passwordAuth: true,
   passwordReset: true,
   resetUrl: "https://example.invalid/reset-password",
-  sso: { name: "Example", availability: "available" as const },
+  sso: null,
 };
+const exampleSso = { name: "Example", availability: "available" as const };
 let host: HTMLDivElement;
 let root: Root;
 
@@ -204,30 +229,19 @@ function expectBefore(first: Element, second: Element) {
   expect(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 }
 
-it.each(["in", "up"])(
-  "places a single quiet SSO action below the password form in %s mode",
-  async (mode) => {
-    route.mode = mode;
-    await render();
-    const email = host.querySelector('input[aria-label="Email"]')!;
-    const password = host.querySelector('input[type="password"]')!;
-    const submit = host.querySelector('button[data-prominence="primary"]')!;
-    const buttons = ssoButtons();
-    expect(buttons).toHaveLength(1);
-    const sso = buttons[0]!;
-    const prompt = [...host.querySelectorAll("span")].find(
-      (span) =>
-        span.textContent ===
-        (mode === "in" ? "Don’t have an account?" : "Already have an account?"),
-    )!;
-    expect(submit.textContent).toBe(mode === "in" ? "Sign in" : "Sign up");
-    expect(sso.dataset.prominence).toBe("quiet");
-    expectBefore(email, password);
-    expectBefore(password, submit);
-    expectBefore(submit, sso);
-    expectBefore(sso, prompt);
-  },
-);
+it.each(["in", "up"])("offers a provider before the email form in %s mode", async (mode) => {
+  route.mode = mode;
+  vi.mocked(passwordResetCapabilities).mockResolvedValue({ ...capabilities, sso: exampleSso });
+  await render();
+  expect(input("Email")).toBeNull();
+  expect(button("Example")).toBeDefined();
+  expect(button("Continue with email")).toBeDefined();
+  await press("Continue with email");
+  expect(input("Email")).not.toBeNull();
+  expect(button("Back")).toBeDefined();
+  await press("Back");
+  expect(input("Email")).toBeNull();
+});
 
 it.each(["in", "up"])(
   "shows one primary SSO action without credentials in SSO-only %s mode",
@@ -236,6 +250,7 @@ it.each(["in", "up"])(
     vi.mocked(passwordResetCapabilities).mockResolvedValue({
       ...capabilities,
       passwordAuth: false,
+      sso: exampleSso,
     });
     await render();
     expect(ssoButtons()).toHaveLength(1);
@@ -244,6 +259,38 @@ it.each(["in", "up"])(
     expect(host.querySelector("input")).toBeNull();
   },
 );
+
+it("offers each configured provider and uses native Apple on iOS", async () => {
+  vi.mocked(passwordResetCapabilities).mockResolvedValue({
+    ...capabilities,
+    sso: null,
+    providers: [
+      { id: "google", name: "Google" },
+      { id: "apple", name: "Apple", native: true },
+    ],
+  });
+  vi.mocked(continueWithSso).mockResolvedValue(false);
+  vi.mocked(continueWithNativeSignIn).mockResolvedValue(false);
+  await render();
+  expect(input("Email")).toBeNull();
+  expect(button("Google")).toBeDefined();
+  expect(button("Apple")).toBeDefined();
+  expect(button("Continue with email")).toBeDefined();
+  await press("Google");
+  expect(continueWithSso).toHaveBeenCalledWith("sign-in", "google");
+  expect(continueWithNativeSignIn).not.toHaveBeenCalled();
+  await press("Apple");
+  expect(continueWithNativeSignIn).toHaveBeenCalledWith("apple");
+  await press("Continue with email");
+  expect(input("Email")).not.toBeNull();
+});
+
+it("hides social buttons when the server configures none", async () => {
+  vi.mocked(passwordResetCapabilities).mockResolvedValue({ ...capabilities, sso: null });
+  await render();
+  expect(host.textContent).not.toContain("Continue with");
+  expect(input("Email")).not.toBeNull();
+});
 
 it("hides SSO when switching to password recovery", async () => {
   await render();
@@ -516,9 +563,11 @@ it.each(["in", "up"])(
 
 it("returns to the pending share after SSO", async () => {
   route.waiting = true;
+  vi.mocked(passwordResetCapabilities).mockResolvedValue({ ...capabilities, sso: exampleSso });
   vi.mocked(continueWithSso).mockResolvedValue(true);
   await render();
-  await act(async () => ssoButtons()[0]!.click());
+  await press("Example");
+  expect(continueWithSso).toHaveBeenCalledWith("sign-in", "oidc");
   expect(router.replace).toHaveBeenCalledWith("/share");
 });
 
