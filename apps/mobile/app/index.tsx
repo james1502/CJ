@@ -30,7 +30,7 @@ import { createHomeStyles } from "../components/home-styles";
 import { ActivitySection } from "../components/inbox-activity";
 import { InboxHeader } from "../components/inbox-header";
 import { InboxListFooter, SWIPE_ROWS, useInboxRenderItem } from "../components/inbox-render-item";
-import { CompactRowsContext, SelectedChatContext } from "../components/inbox-rows";
+import { CompactRowsContext, NeedsYouRow, SelectedChatContext } from "../components/inbox-rows";
 import { NativeInboxList } from "../components/native-inbox-list";
 import { OrganizationTitleMenu } from "../components/organization-menu";
 import { PickChatPane } from "../components/pick-chat-pane";
@@ -91,6 +91,7 @@ import {
 import { useSplitView } from "../lib/split-view";
 import { confirmUnsentSendLoss } from "../lib/unsent-send-warning";
 import { useArchivedCount } from "../lib/use-archived-count";
+import { useAttentionCount } from "../lib/use-attention-count";
 import { useCollapsedSections } from "../lib/use-collapsed-sections";
 import { useHomeHeader } from "../lib/use-home-header";
 import { useHomeInbox } from "../lib/use-home-inbox";
@@ -283,6 +284,11 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
   const { activity, setActivity, activityRequestId, loadActivity } = useSpaceActivity({
     hasSession,
     activityMode,
+    inSight: embedded || isFocused,
+    spaceActionRef,
+  });
+  const { attentionCount, loadAttention, resetAttention } = useAttentionCount({
+    hasSession,
     inSight: embedded || isFocused,
     spaceActionRef,
   });
@@ -501,6 +507,7 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
       inboxRequestId.current += 1;
       activityRequestId.current += 1;
       setActivity({ active: [], recent: [] });
+      resetAttention();
       // Close a pane in another space before selection can change its request context.
       onSelectSpace?.(spaceId);
       try {
@@ -518,6 +525,7 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
           spaceActionRef.current.busy = false;
           await refreshBots();
           await loadActivity();
+          await loadAttention();
         };
         const selected =
           spaceActionRef.current.recoveryId === spaceId
@@ -533,7 +541,7 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
         setSpaceBusy(false);
       }
     },
-    [refreshBots, loadActivity, onSelectSpace, t],
+    [refreshBots, loadActivity, loadAttention, onSelectSpace, resetAttention, t],
   );
 
   const deleteInboxSpace = useCallback(
@@ -548,12 +556,14 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
       setSpaceBusy(true);
       inboxRequestId.current += 1;
       activityRequestId.current += 1;
+      resetAttention();
       try {
         const recoveryId = await removeInboxSpace(space.id, async () => {
           spaceActionRef.current.busy = false;
           setActivity({ active: [], recent: [] });
           await refreshBots();
           await loadActivity();
+          await loadAttention();
         });
         if (recoveryId) {
           spaceActionRef.current.recoveryId = recoveryId;
@@ -567,7 +577,7 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
         setSpaceBusy(false);
       }
     },
-    [refreshBots, loadActivity, t],
+    [refreshBots, loadActivity, loadAttention, resetAttention, t],
   );
 
   const confirmDeleteSpace = useCallback(
@@ -744,7 +754,10 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
   const inlineError = error ?? (showLoadFailure ? null : (loadFailure?.message ?? null));
 
   const hasListHeader = Boolean(
-    inlineError || spaceRecoveryId || (!onShareSelect && activityMode && userId),
+    inlineError ||
+      spaceRecoveryId ||
+      (!onShareSelect && attentionCount > 0) ||
+      (!onShareSelect && activityMode && userId),
   );
   const listHeader = (
     <>
@@ -758,6 +771,9 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
         >
           <Text style={styles.spaceTitle}>{t("Try again.")}</Text>
         </Pressable>
+      ) : null}
+      {!onShareSelect && attentionCount > 0 ? (
+        <NeedsYouRow count={attentionCount} onPress={() => router.push("/needs")} />
       ) : null}
       {/* Folds are saved per account, so wait for it before offering them. */}
       {!onShareSelect && activityMode && userId ? (
@@ -803,7 +819,7 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
     />
   );
   const refreshInbox = async () => {
-    await Promise.all([refreshBots(), loadActivity()]);
+    await Promise.all([refreshBots(), loadActivity(), loadAttention()]);
   };
 
   return (
@@ -872,6 +888,7 @@ function Home({ embedded, onSelectSpace, onShareSelect }: InboxPaneProps & { emb
                       onRefresh={() => {
                         void refreshBots();
                         void loadActivity();
+                        void loadAttention();
                       }}
                       tintColor={native.secondaryLabel}
                       colors={[tokens.mutedForeground]}
