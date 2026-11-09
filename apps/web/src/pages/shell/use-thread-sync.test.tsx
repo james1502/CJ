@@ -75,6 +75,7 @@ function syncInput({
       computerOpenRef: ref(false),
       computerBotIdRef: ref(null),
       refreshComputerScreen: vi.fn(async () => {}),
+      isOwnControlEvent: vi.fn(() => false),
     },
     active: inGroup ? undefined : { id: "bot-1", name: "Bot", ...bot },
     activeGroup: inGroup ? { id: "group-1", name: "Group" } : undefined,
@@ -142,6 +143,120 @@ it.each([false, true])(
     expect(subscription.signal.aborted).toBe(true);
   },
 );
+
+it.each([
+  [true, 0],
+  [false, 1],
+])(
+  "reads the screen for a control event unless this tab asked for it (own: %s)",
+  async (own, reads) => {
+    vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
+    const snapshot = {
+      threadId: "thread-1",
+      cursor: 1,
+      messages: [],
+      run: null,
+    } as unknown as ThreadSnapshot;
+    const input = syncInput({
+      inGroup: false,
+      get: vi.fn(async () => snapshot),
+      commitSnapshot: vi.fn(),
+    });
+    vi.mocked(input.computerState.isOwnControlEvent).mockReturnValue(own);
+    function Probe() {
+      useThreadSync(input);
+      return null;
+    }
+    const root = createRoot(document.createElement("div"));
+    await act(async () => root.render(createElement(Probe)));
+    vi.mocked(input.computerState.refreshComputerScreen).mockClear();
+    const subscription = vi.mocked(runThreadSubscription).mock.calls[0]![0];
+    subscription.onEvent(
+      {
+        type: "computer.takeover.granted",
+        payload: { leaseId: "lease-1" },
+      } as unknown as ProductEvent,
+      snapshot,
+    );
+    await flush();
+    expect(input.computerState.isOwnControlEvent).toHaveBeenCalledWith(
+      "bot-1",
+      "computer.takeover.granted",
+      "lease-1",
+    );
+    expect(input.computerState.refreshComputerScreen).toHaveBeenCalledTimes(reads);
+    act(() => root.unmount());
+  },
+);
+
+it("reconciles a shared computer's own grant without reading the screen again", async () => {
+  vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
+  const snapshot = {
+    threadId: "thread-1",
+    cursor: 1,
+    messages: [],
+    run: null,
+  } as unknown as ThreadSnapshot;
+  const get = vi.fn(async () => snapshot);
+  const input = syncInput({ inGroup: false, get, commitSnapshot: vi.fn() });
+  input.computerState.computerRef.current = { shared: true } as never;
+  vi.mocked(input.computerState.isOwnControlEvent).mockReturnValue(true);
+  function Probe() {
+    useThreadSync(input);
+    return null;
+  }
+  const root = createRoot(document.createElement("div"));
+  await act(async () => root.render(createElement(Probe)));
+  await flush();
+  get.mockClear();
+  vi.mocked(input.computerState.refreshComputerScreen).mockClear();
+  const subscription = vi.mocked(runThreadSubscription).mock.calls[0]![0];
+  subscription.onEvent(
+    {
+      type: "computer.takeover.granted",
+      payload: { leaseId: "lease-1" },
+    } as unknown as ProductEvent,
+    snapshot,
+  );
+  await flush();
+  await flush();
+  // The grant may still be someone else's while this tab's call is out, so the snapshot says.
+  expect(get).toHaveBeenCalledTimes(1);
+  expect(input.computerState.refreshComputerScreen).not.toHaveBeenCalled();
+  act(() => root.unmount());
+});
+
+it("leaves the screen to a caller that reads it itself", async () => {
+  vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
+  const snapshot = {
+    threadId: "thread-1",
+    cursor: 1,
+    messages: [],
+    run: null,
+  } as unknown as ThreadSnapshot;
+  const input = syncInput({
+    inGroup: false,
+    get: vi.fn(async () => snapshot),
+    commitSnapshot: vi.fn(),
+  });
+  let sync!: ReturnType<typeof useThreadSync>;
+  function Probe() {
+    sync = useThreadSync(input);
+    return null;
+  }
+  const root = createRoot(document.createElement("div"));
+  await act(async () => root.render(createElement(Probe)));
+  vi.mocked(input.computerState.refreshComputerScreen).mockClear();
+  await act(async () => {
+    await sync.refreshThread("bot-1", undefined, { readScreen: false });
+  });
+  expect(input.computerState.refreshComputerScreen).not.toHaveBeenCalled();
+  await act(async () => {
+    await sync.refreshThread("bot-1");
+  });
+  expect(input.computerState.refreshComputerScreen).toHaveBeenCalledTimes(1);
+  act(() => root.unmount());
+});
 
 it.each([
   ["running", { status: "running" }, true],
