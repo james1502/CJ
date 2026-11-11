@@ -4,6 +4,7 @@
   display: inline-block;
   overflow: hidden;
   vertical-align: middle;
+  shape-rendering: crispEdges;
 }
 .logo-avatar-plate {
   fill: var(--sidebar);
@@ -11,20 +12,20 @@
 .logo-avatar-outline {
   fill: none;
   stroke: var(--border);
-  stroke-width: 1;
+  stroke-width: 2;
 }
 .logo-avatar-body {
   transform-origin: 50px 84px;
 }
 .logo-avatar-gaze {
-  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 180ms steps(2, end);
 }
 .logo-avatar-glint {
   fill: var(--logo-eye-light);
-  opacity: 0.15;
+  opacity: 0;
 }
 .logo-avatar-eye-lid {
-  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 180ms steps(2, end);
 }
 
 /* Separate clocks keep a bot's two eyes paired without synchronising the fleet. */
@@ -38,7 +39,7 @@
 .rakazo-logo-avatar[data-motion="true"] .logo-avatar-action {
   animation-duration: var(--logo-move-duration);
   animation-delay: var(--logo-move-delay);
-  animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  animation-timing-function: steps(4, end);
   animation-iteration-count: infinite;
 }
 .rakazo-logo-avatar[data-motion="true"]

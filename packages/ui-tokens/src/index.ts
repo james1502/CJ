@@ -187,8 +187,9 @@ export type WebColorTokens = ColorTokens & {
 /**
  * Web and Electron values for the tokens they draw differently from the palettes above, which
  * follow the iOS system design for mobile. Mobile reads `darkTokens` / `lightTokens`; web reads
- * `tokens.css`, rendered from these merged palettes. Surfaces are opaque; text, borders, hover
- * and selection are the ink at an opacity, so they read the same on every surface.
+ * `tokens.css`, rendered from these merged palettes. Surfaces, borders, and text are flat solids
+ * so the chrome reads as hard edges. Link blue is the one accent, reused for focus, unread, and
+ * working status.
  */
 export const webDarkOverrides = {
   background: "#0A0A0A",
@@ -200,26 +201,26 @@ export const webDarkOverrides = {
   popoverForeground: "#F5F5F5",
   primary: "#F5F5F5",
   primaryHover: "#DBDBDB",
-  primaryDisabled: "#F5F5F521",
+  primaryDisabled: "#3A3A3A",
   primaryForeground: "#121212",
-  secondary: "#F5F5F50A",
+  secondary: "#242424",
   secondaryForeground: "#F5F5F5",
   chatUser: "#3E3E3E",
   chatUserForeground: "#F5F5F5",
   muted: "#232323",
-  mutedForeground: "#F5F5F5A8",
-  faintForeground: "#F5F5F58A",
-  accent: "#F5F5F51A",
+  mutedForeground: "#B0B0B0",
+  faintForeground: "#8A8A8A",
+  accent: "#242424",
   accentForeground: "#F5F5F5",
   destructive: "#FF6463",
   destructiveFill: "#CF2B35",
-  border: "#F5F5F51A",
-  input: "#F5F5F538",
-  ring: "#1884FC",
+  border: "#3A3A3A",
+  input: "#3A3A3A",
+  ring: "#4D9BFF",
   sidebar: "#0A0A0A",
   sidebarForeground: "#F5F5F5",
-  sidebarBorder: "#F5F5F50F",
-  sidebarAccent: "#F5F5F514",
+  sidebarBorder: "#3A3A3A",
+  sidebarAccent: "#242424",
   sidebarAccentForeground: "#F5F5F5",
   link: "#4D9BFF",
   success: "#00BA69",
@@ -228,8 +229,8 @@ export const webDarkOverrides = {
   unread: "#4D9BFF",
   workingDot: "#0E9F5A",
   overlay: "#000000B2",
-  scrollbar: "#F5F5F538",
-  scrollbarHover: "#F5F5F580",
+  scrollbar: "#3A3A3A",
+  scrollbarHover: "#5A5A5A",
 } as const satisfies Partial<WebColorTokens>;
 
 export const webLightOverrides = {
@@ -240,25 +241,25 @@ export const webLightOverrides = {
   popoverForeground: "#1C1C1C",
   primary: "#1C1C1C",
   primaryHover: "#363636",
-  primaryDisabled: "#1C1C1C26",
+  primaryDisabled: "#A3A3A3",
   primaryForeground: "#FCFCFC",
-  secondary: "#1C1C1C0F",
+  secondary: "#E6E6E6",
   secondaryForeground: "#1C1C1C",
   chatUser: "#1C1C1C",
   muted: "#F2F2F2",
-  mutedForeground: "#1C1C1CAD",
-  faintForeground: "#1C1C1C8F",
-  accent: "#1C1C1C0F",
+  mutedForeground: "#4A4A4A",
+  faintForeground: "#5C5C5C",
+  accent: "#E6E6E6",
   accentForeground: "#1C1C1C",
   destructive: "#CD2834",
   destructiveFill: "#E72E3B",
-  border: "#1C1C1C1F",
-  input: "#1C1C1C3D",
-  ring: "#1E86FC",
+  border: "#1C1C1C",
+  input: "#1C1C1C",
+  ring: "#0B6DD3",
   sidebar: "#F5F5F5",
   sidebarForeground: "#1C1C1C",
-  sidebarBorder: "#1C1C1C1F",
-  sidebarAccent: "#1C1C1C14",
+  sidebarBorder: "#1C1C1C",
+  sidebarAccent: "#E6E6E6",
   sidebarAccentForeground: "#1C1C1C",
   link: "#0B6DD3",
   success: "#00854A",
@@ -267,8 +268,8 @@ export const webLightOverrides = {
   unread: "#0B6DD3",
   workingDot: "#10AB61",
   overlay: "#00000080",
-  scrollbar: "#1C1C1C3D",
-  scrollbarHover: "#1C1C1C85",
+  scrollbar: "#1C1C1C",
+  scrollbarHover: "#000000",
 } as const satisfies Partial<WebColorTokens>;
 
 export const webDarkTokens: WebColorTokens = { ...darkTokens, ...webDarkOverrides };
@@ -277,7 +278,7 @@ export const webLightTokens: WebColorTokens = { ...lightTokens, ...webLightOverr
 /** Dark palette. Prefer `tokensForAppearance` when theme-aware. */
 export const tokens = darkTokens;
 
-export const RADIUS = "0.75rem";
+export const RADIUS = "0px";
 
 export const fontWeight = { regular: "400", medium: "500", semibold: "600" } as const;
 
