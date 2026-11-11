@@ -924,7 +924,7 @@ export class TeamChatBridge {
       const blocks = Array.isArray(response?.blocks) ? (response.blocks as MessageBlock[]) : [];
       const content =
         run.status === "failed"
-          ? `${target.name} could not complete the delegated request. Open Rakazo for details.`
+          ? `${target.name} could not complete the delegated request. Open the app for details.`
           : teamChatResponseText(blocks, target.name, true);
       if (content) {
         await this.deps.send({

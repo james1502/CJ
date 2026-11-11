@@ -168,7 +168,7 @@ test("imports an OpenClaw folder and another assistant's document as new bots", 
   await expect(mcp.getByRole("checkbox", { name: "docs" })).not.toBeChecked();
   await expect(mcp.getByText("Credentials: Authorization", { exact: true })).toBeVisible();
   await expect(mcp.getByRole("checkbox", { name: "files" })).toBeDisabled();
-  await expect(mcp.getByText("Not supported in Rakazo", { exact: true })).toBeVisible();
+  await expect(mcp.getByText("Not supported", { exact: true })).toBeVisible();
   await captureScreenshot(page, testInfo, "agent-import-compatibility");
   // Choices made before the opt-in survive it, in both directions.
   const nameBox = homePreview.getByRole("textbox", { name: "Name" });

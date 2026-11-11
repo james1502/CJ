@@ -11,7 +11,7 @@ import { t, withDetail } from "./i18n.js";
  */
 export const APP_DOCUMENT_STATE_SCRIPT = `(() => {
   const appState =
-    document.querySelector("[data-rakazo-app-state]")?.getAttribute("data-rakazo-app-state") ??
+    document.querySelector("[data-rakazo-app-state]")?.getAttribute("data-rakazo-app-state")??
     null;
   if (appState === "session-pending") return "pending";
   // The web app's last-resort error screen: keep it so its Refresh can recover.
@@ -41,14 +41,14 @@ export const APP_DOCUMENT_STATE_SCRIPT = `(() => {
     performance.getEntriesByName("rk:renderer:session-committed").length > 0;
   if (sessionReady && surfaceReady) return "ready";
 
-  // Desktop e2e fixtures mount a plain page without Rakazo app-state markers.
+  // Desktop e2e fixtures mount a plain page without app-state markers.
   if (appState === null) {
     const bodyText = (document.body?.innerText || "").trim();
     if (bodyText.includes("Opening your Space")) return "pending";
     if (bodyText === "Loading…" || bodyText === "Loading...") return "pending";
     const mainText = (document.querySelector("main")?.textContent || "").trim();
-    const rootChildren = document.getElementById("root")?.childElementCount ?? 0;
-    return mainText.length > 0 || rootChildren > 0 ? "ready" : "pending";
+    const rootChildren = document.getElementById("root")?.childElementCount?? 0;
+    return mainText.length > 0 || rootChildren > 0? "ready": "pending";
   }
   return "pending";
 })()`;

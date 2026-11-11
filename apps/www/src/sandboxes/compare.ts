@@ -25,7 +25,7 @@ export const HOSTED_SANDBOXES_TABLE: ArticleTable = {
   caption: "Hosted sandboxes for AI agents compared",
   columns: [
     "Sandbox",
-    "In Rakazo",
+    "In ",
     "Isolation",
     `${WORKDAY_HOURS} hours at 2 vCPU / 4 GB`,
     "Longest session",
@@ -36,10 +36,10 @@ export const HOSTED_SANDBOXES_TABLE: ArticleTable = {
     {
       topic: "[Boat](/sandboxes/boat/)",
       cells: [
-        "Yes. Rakazo Cloud runs on it",
+        "Yes. Cloud runs on it",
         "Full VM per machine",
-        `${usd(boatMonthly(BOAT.small.hour, WORKDAY_HOURS))}, the monthly minimum. Rakazo's smallest Boat size is ${BOAT_RAKAZO.vcpus} vCPU / ${BOAT_RAKAZO.gb} GB, which is also ${usd(boatMonthly(BOAT_RAKAZO.hour, WORKDAY_HOURS))}`,
-        "No fixed cap. Rakazo renews a 2-hour lease while in use",
+        `${usd(boatMonthly(BOAT.small.hour, WORKDAY_HOURS))}, the monthly minimum. 's smallest Boat size is ${BOAT_RAKAZO.vcpus} vCPU / ${BOAT_RAKAZO.gb} GB, which is also ${usd(boatMonthly(BOAT_RAKAZO.hour, WORKDAY_HOURS))}`,
+        "No fixed cap. renews a 2-hour lease while in use",
         "Disk",
         "No",
       ],
@@ -59,7 +59,7 @@ export const HOSTED_SANDBOXES_TABLE: ArticleTable = {
       topic: "[Daytona](/sandboxes/daytona/)",
       cells: [
         "Yes",
-        "Containers, which is how Rakazo creates them. VMs available outside Rakazo",
+        "Containers, which is how creates them. VMs available outside ",
         workday(RATES.daytona),
         "No cap",
         "Disk. Memory only on VM sandboxes",
@@ -84,7 +84,7 @@ export const HOSTED_SANDBOXES_TABLE: ArticleTable = {
         "VM",
         `${aboutUsd(railwayComputerMonthly(WORKDAY_HOURS))}, billed on CPU and memory actually used`,
         "Idle timeout up to 2 hours, or off",
-        "Nothing. Rakazo restores the saved workspace",
+        "Nothing. restores the saved workspace",
         "No",
       ],
     },
@@ -93,7 +93,7 @@ export const HOSTED_SANDBOXES_TABLE: ArticleTable = {
       cells: [
         "Yes, set up from the computer providers guide",
         "Firecracker microVM",
-        `${workday(RATES.createos)} plus disk. Rakazo's default 2 vCPU / 2 GB shape is ${usd(monthly(RATES.createos, WORKDAY_HOURS, CREATEOS_DEFAULT_SHAPE))}`,
+        `${workday(RATES.createos)} plus disk. 's default 2 vCPU / 2 GB shape is ${usd(monthly(RATES.createos, WORKDAY_HOURS, CREATEOS_DEFAULT_SHAPE))}`,
         "Not published",
         "Memory and disk, when paused. Both still billed",
         "No",

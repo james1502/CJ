@@ -104,7 +104,7 @@ export function injectNovncStorageShim(html: string, { viewOnly = false } = {}) 
   // The app cannot look into this sandboxed frame, so tell it how the screen is doing.
   const report = (rakazoScreen, detail) => {
     try {
-      window.parent.postMessage(detail ? { rakazoScreen, detail } : { rakazoScreen }, "*");
+      window.parent.postMessage(detail? { rakazoScreen, detail }: { rakazoScreen }, "*");
     } catch {}
     // The mobile app's WebView hears only the state word: no URL and none of the page's text.
     try {
@@ -115,11 +115,11 @@ export function injectNovncStorageShim(html: string, { viewOnly = false } = {}) 
   window.addEventListener("message", (event) => {
     const data = event.data;
     if (
-      event.source !== window.parent ||
+      event.source!== window.parent ||
       !data ||
-      typeof data !== "object" ||
-      Object.keys(data).length !== 1 ||
-      data.rakazoScreenFocus !== true
+      typeof data!== "object" ||
+      Object.keys(data).length!== 1 ||
+      data.rakazoScreenFocus!== true
     )
       return;
     const canvas = document.querySelector("#screen canvas, #noVNC_container canvas, canvas");
@@ -128,7 +128,7 @@ export function injectNovncStorageShim(html: string, { viewOnly = false } = {}) 
     } catch {}
   });
   let last = "";
-  // Pages that never set noVNC's classes (older Rakazo embed images) still build their viewer
+  // Pages that never set noVNC's classes (older embed images) still build their viewer
   // canvas, which is as far as they can be followed.
   let classed = false;
   const sync = () => {
@@ -143,7 +143,7 @@ export function injectNovncStorageShim(html: string, { viewOnly = false } = {}) 
     if (connecting || connected) classed = true;
     const state = connected
       ? "connected"
-      : failure !== null || statusError
+      : failure!== null || statusError
         ? "failed"
         : connecting
           ? "connecting"
@@ -156,7 +156,7 @@ export function injectNovncStorageShim(html: string, { viewOnly = false } = {}) 
               : "";
     if (!state || state === last) return;
     last = state;
-    report(state, state === "failed" ? failure || String(status?.textContent || "") : undefined);
+    report(state, state === "failed"? failure || String(status?.textContent || ""): undefined);
   };
   const observe = () => {
     sync();

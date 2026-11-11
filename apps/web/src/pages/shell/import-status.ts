@@ -43,9 +43,7 @@ export function useImportStatusText() {
       case "needs_review":
         return t`Contains code to run`;
       case "unsupported":
-        return value.reason === "not_in_catalog"
-          ? t`Not in Rakazo's catalog`
-          : t`Not supported in Rakazo`;
+        return value.reason === "not_in_catalog" ? t`Not in 's catalog` : t`Not supported`;
     }
   };
   return { need, status };

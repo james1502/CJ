@@ -35,7 +35,7 @@ export const MISSING_MODEL_RUN_ERROR = "Connect a model in Settings before runni
 
 /** A deployment model run while the organization has not chosen Rakazo credits. */
 export const HOSTED_MODEL_CREDITS_REQUIRED_ERROR =
-  "Connect your own API key in Models or choose Rakazo credits in Billing.";
+  "Connect your own API key in Models or choose credits in Billing.";
 
 /** A metered model call the organization's Rakazo credits cannot cover. */
 export const MODEL_CREDITS_EXHAUSTED_ERROR =

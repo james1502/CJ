@@ -25,12 +25,12 @@ export function homepage(slug: string, provider: string, alt: string): SandboxIm
 }
 
 export const PROVIDERS_DOC: SourceLink = {
-  label: "Rakazo, computer providers",
+  label: ", computer providers",
   href: `${GITHUB_URL}/blob/main/docs/self-host-sandbox-providers.md`,
 };
 
 export const RUNTIME_DOC: SourceLink = {
-  label: "Rakazo, computer runtime and isolation",
+  label: ", computer runtime and isolation",
   href: `${GITHUB_URL}/blob/main/docs/computer-runtime.md`,
 };
 
@@ -138,12 +138,12 @@ export const BOAT = {
  */
 export const BOAT_SIZES = [
   {
-    plan: "Rakazo Cloud's Standard plan and Rakazo credits, and every self-hosted install",
+    plan: "Cloud's Standard plan and Credits, and every self-hosted install",
     machine: "default",
     ...BOAT.default,
   },
-  { plan: "The Rakazo Cloud Pro plan", machine: "large", ...BOAT.large },
-  { plan: "The Rakazo Cloud Max plan", machine: "xlarge", ...BOAT.xlarge },
+  { plan: "The Cloud Pro plan", machine: "large", ...BOAT.large },
+  { plan: "The Cloud Max plan", machine: "xlarge", ...BOAT.xlarge },
 ] as const;
 
 /** The standard size, which the worked examples price. */
@@ -246,5 +246,5 @@ export const PRICING = {
   },
   hetzner: { label: "Hetzner Cloud pricing", href: "https://www.hetzner.com/cloud/cost-optimized/" },
   digitalocean: { label: "DigitalOcean Droplet pricing", href: "https://www.digitalocean.com/pricing/droplets" },
-  rakazo: { label: "Rakazo pricing", href: `${SITE_URL}/pricing/` },
+  rakazo: { label: " pricing", href: `${SITE_URL}/pricing/` },
 } satisfies Record<string, SourceLink>;

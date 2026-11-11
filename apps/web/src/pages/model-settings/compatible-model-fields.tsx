@@ -154,7 +154,7 @@ export function CompatibleModelFields({
           summary={<Trans>Setup help</Trans>}
         >
           <p className="mt-1">
-            {t`Paste the OpenAI-compatible address from your server. Rakazo adds /v1 if needed.`}
+            {t`Paste the OpenAI-compatible address from your server. /v1 is added if needed.`}
           </p>
         </Disclosure>
       ) : null}

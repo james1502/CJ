@@ -113,12 +113,12 @@ export function HonchoSettingsForm({ busy, onConnect }: MemoryProviderSettingsFo
             autoComplete="off"
           />
           <p id={userPeerDescriptionId} className="mt-2 text-body-sm text-muted-foreground">
-            <Trans>Recall from this peer; save to Rakazo’s own peers.</Trans>
+            <Trans>Recall from this peer; save to its own peers.</Trans>
           </p>
           {!userPeerValid ? (
             <FieldError id={userPeerErrorId}>
               {userPeerFormatValid ? (
-                <Trans>rakazo-shared and IDs starting with bot- are reserved for Rakazo.</Trans>
+                <Trans>rakazo-shared and IDs starting with bot- are reserved.</Trans>
               ) : (
                 <Trans>Use up to 512 letters, digits, _ or -.</Trans>
               )}
