@@ -2,22 +2,39 @@
 @import "./shadcn.css";
 @import "@rakazo/ui-tokens/css";
 
+@font-face {
+  font-family: "Silkscreen";
+  src: url("./fonts/Silkscreen-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Silkscreen";
+  src: url("./fonts/Silkscreen-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @source "./**/*.{ts,tsx}";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Web type: the system font and one type scale, so sizes stay consistent and a theme can change
+/* Web type: one bitmap face and one type scale, so sizes stay consistent and a theme can change
    them in one place. Tailwind's default sizes are switched off; use these. A size off the scale
    needs an `off-scale:` comment saying why (see type-scale.test.ts). Mobile sets its own type. */
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-    monospace;
+  --font-sans: "Silkscreen", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-mono: "Silkscreen", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-weight-normal: 400;
+  --font-weight-medium: 700;
+  --font-weight-semibold: 700;
   --text-*: initial;
   --text-caption: 11px;
   --text-caption--line-height: 16px;
-  --text-caption--letter-spacing: 0.005em;
+  --text-caption--letter-spacing: 0px;
   --text-label: 12px;
   --text-label--line-height: 16px;
   --text-body-sm: 13px;
@@ -28,21 +45,16 @@
   --text-body-lg--line-height: 22px;
   --text-heading3: 17px;
   --text-heading3--line-height: 24px;
-  --text-heading3--letter-spacing: -0.008em;
+  --text-heading3--letter-spacing: 0px;
   --text-heading2: 22px;
   --text-heading2--line-height: 28px;
-  --text-heading2--letter-spacing: -0.012em;
+  --text-heading2--letter-spacing: 0px;
   --text-heading1: 26px;
   --text-heading1--line-height: 32px;
-  --text-heading1--letter-spacing: -0.015em;
+  --text-heading1--letter-spacing: 0px;
   --text-display: 32px;
   --text-display--line-height: 40px;
-  --text-display--letter-spacing: -0.02em;
-}
-
-/* The system font reads light at 400 on macOS; regular text uses 420 there. Medium and semibold stay. */
-:root[data-os="mac"] {
-  --font-weight-normal: 420;
+  --text-display--letter-spacing: 0px;
 }
 
 @theme inline {
@@ -86,11 +98,18 @@
   --color-overlay: var(--overlay);
   --color-scrollbar: var(--scrollbar);
   --color-scrollbar-hover: var(--scrollbar-hover);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --shadow-2xs: 1px 1px 0 #000;
+  --shadow-xs: 2px 2px 0 #000;
+  --shadow-sm: 2px 2px 0 #000;
+  --shadow-md: 3px 3px 0 #000;
+  --shadow-lg: 4px 4px 0 #000;
+  --shadow-xl: 5px 5px 0 #000;
+  --shadow-2xl: 6px 6px 0 #000;
   --animate-caret-blink: caret-blink 1.25s ease-out infinite;
 
   @keyframes caret-blink {
@@ -109,6 +128,11 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    text-rendering: optimizeSpeed;
   }
   body {
     @apply bg-background text-foreground;
@@ -148,7 +172,7 @@
 }
 
 .rakazo-bot-avatar-ring {
-  animation: rakazo-avatar-spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: rakazo-avatar-spin 1.2s steps(8, end) infinite;
   opacity: 0;
   transition: opacity 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -168,29 +192,26 @@
 
 @keyframes rakazo-avatar-breathe {
   0%,
-  100% {
-    transform: scale(1);
-    filter: brightness(1);
+  49% {
+    transform: none;
   }
-  50% {
-    transform: scale(1.07);
-    filter: brightness(1.12);
+  50%,
+  100% {
+    transform: translate(1px, -1px);
   }
 }
 
 .rakazo-bot-avatar-picture {
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.5);
+  box-shadow: 2px 2px 0 #000;
 }
 
 .rakazo-bot-avatar-ring-working {
-  filter: drop-shadow(0 0 4px var(--status-working));
+  filter: none;
 }
 
 .rakazo-bot-avatar[data-working="true"] .rakazo-bot-avatar-picture {
-  animation: rakazo-avatar-breathe 1.6s ease-in-out infinite;
-  box-shadow:
-    0 0 0 2px var(--status-working),
-    0 0 10px color-mix(in srgb, var(--status-working) 60%, transparent);
+  animation: rakazo-avatar-breathe 0.6s steps(1, end) infinite;
+  box-shadow: 0 0 0 2px var(--status-working);
 }
 
 .rakazo-organic-avatar-body {
@@ -480,4 +501,9 @@
     animation: none;
     transition: none;
   }
+}
+
+[class*="backdrop-blur"] {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
