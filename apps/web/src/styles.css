@@ -13,8 +13,8 @@ body,
   color: var(--foreground);
   font-family: var(--font-sans);
   font-weight: var(--font-weight-normal);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 }
 
 /* viewport-fit=cover lets the shell reach the screen edges; keep it clear of notches and the home indicator. */
@@ -73,7 +73,7 @@ body,
 }
 .rk-scroll::-webkit-scrollbar-thumb {
   background: var(--scrollbar);
-  border-radius: 3px;
+  border-radius: 0;
 }
 .rk-scroll::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-hover);
