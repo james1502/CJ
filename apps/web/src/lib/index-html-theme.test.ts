@@ -42,9 +42,10 @@ describe("index.html theme bootstrap", () => {
     expect(root.dataset.os).toBe(os);
   });
 
-  it("raises regular text to 420 only on macOS", () => {
+  it("keeps regular text at 400 on every OS, including macOS", () => {
     const css = read("../../../../packages/ui-web/src/styles.css");
-    expect(css).toMatch(/:root\[data-os="mac"\] \{\s*--font-weight-normal: 420;\s*\}/);
+    expect(css).toContain("--font-weight-normal: 400;");
+    expect(css).not.toMatch(/--font-weight-normal:\s*420/);
     expect(read("../styles.css")).toContain("font-weight: var(--font-weight-normal);");
   });
 });
