@@ -41,13 +41,13 @@ body,
 ::view-transition-old(rk-space-sidebar),
 ::view-transition-new(rk-space-sidebar) {
   animation-duration: 120ms;
-  animation-timing-function: ease;
+  animation-timing-function: steps(3, end);
 }
 ::view-transition-old(rk-space-main) {
-  animation: rk-space-out 120ms ease both;
+  animation: rk-space-out 120ms steps(3, end) both;
 }
 ::view-transition-new(rk-space-main) {
-  animation: rk-space-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) 60ms both;
+  animation: rk-space-in 180ms steps(4, end) 40ms both;
 }
 @keyframes rk-space-out {
   to {
@@ -57,16 +57,16 @@ body,
 @keyframes rk-space-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
 }
 
 .rk-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 .rk-scroll {
   scrollbar-color: var(--scrollbar) transparent;
-  scrollbar-width: thin;
+  scrollbar-width: auto;
 }
 .rk-scroll::-webkit-scrollbar-track {
   background: transparent;
@@ -115,7 +115,8 @@ body,
 
 /* Find in chat (pages/shell/chat-find-bar.tsx) paints its matches without touching the transcript. */
 ::highlight(rk-find) {
-  background-color: color-mix(in oklab, var(--foreground) 18%, transparent);
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
 }
 ::highlight(rk-find-current) {
   background-color: var(--primary);
