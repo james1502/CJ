@@ -18,14 +18,14 @@
   transform-origin: 50px 84px;
 }
 .logo-avatar-gaze {
-  transition: transform 180ms steps(2, end);
+  transition: transform 120ms steps(2, end);
 }
 .logo-avatar-glint {
   fill: var(--logo-eye-light);
   opacity: 0;
 }
 .logo-avatar-eye-lid {
-  transition: transform 180ms steps(2, end);
+  transition: transform 120ms steps(2, end);
 }
 
 /* Separate clocks keep a bot's two eyes paired without synchronising the fleet. */
@@ -220,10 +220,10 @@
 @keyframes logo-avatar-breathe {
   0%,
   100% {
-    transform: scale(1);
+    transform: translateY(0);
   }
   50% {
-    transform: scale(1.005);
+    transform: translateY(-2px);
   }
 }
 @keyframes logo-avatar-read {
@@ -505,10 +505,10 @@
 
 /* Native fades temporarily overlap continuing poses; their clocks do not restart. */
 .logo-avatar-layer[data-entering="true"] {
-  animation: logo-avatar-layer-in 180ms ease-in-out both;
+  animation: logo-avatar-layer-in 120ms steps(3, end) both;
 }
 .logo-avatar-layer[data-outgoing="true"] {
-  animation: logo-avatar-layer-out 180ms ease-in-out both;
+  animation: logo-avatar-layer-out 120ms steps(3, end) both;
 }
 @keyframes logo-avatar-layer-in {
   from {
