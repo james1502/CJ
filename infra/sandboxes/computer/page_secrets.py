@@ -344,7 +344,8 @@ EVAL_HELPERS = r"""
     let node = el.parentElement;
     for (let level = 0; level < 3 && node && node !== document.body && node !== document.documentElement;
          level++, node = node.parentElement) {
-      if (!codeShown(node.innerText ?? node.textContent ?? "").includes(digits)) continue;
+      // Prefer visible text; fall back when innerText is empty (jsdom, and some overlays).
+      if (!codeShown(node.innerText || node.textContent || "").includes(digits)) continue;
       if (!cardMasked.has(node)) maskCard(node);
       if (!held.includes(node)) held.push(node);
       break;
