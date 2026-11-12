@@ -1,5 +1,7 @@
 // @vitest-environment jsdom
 
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
 import type { BotAvatarSet } from "@rakazo/contracts";
 import { DEFAULT_BOT_AVATAR_COLOR } from "@rakazo/ui-web";
 import type { ReactNode } from "react";
@@ -28,20 +30,24 @@ function Harness({
   const [value, setValue] = useState(initial);
   const [avatarSet, setAvatarSet] = useState(initialSet);
   return (
-    <AvatarStudioPopover
-      value={value}
-      identity="sample-bot"
-      avatarSet={avatarSet}
-      onChange={(next, nextSet) => {
-        changed(next, nextSet);
-        setValue(next);
-        if (nextSet !== undefined) setAvatarSet(nextSet);
-      }}
-    />
+    <I18nProvider i18n={i18n}>
+      <AvatarStudioPopover
+        value={value}
+        identity="sample-bot"
+        avatarSet={avatarSet}
+        onChange={(next, nextSet) => {
+          changed(next, nextSet);
+          setValue(next);
+          if (nextSet !== undefined) setAvatarSet(nextSet);
+        }}
+      />
+    </I18nProvider>
   );
 }
 
 beforeEach(() => {
+  i18n.load("en", {});
+  i18n.activate("en");
   (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia ??= ((query: string) => ({
     matches: false,
@@ -73,18 +79,18 @@ async function render(value: string, avatarSet?: BotAvatarSet, key = "initial") 
 }
 
 describe("selectable bot icon sets", () => {
-  it("keeps a legacy appearance on open, saves a Rakazo switch, and restores the saved set on reload", async () => {
+  it("keeps a legacy appearance on open, saves a Pixel switch, and restores the saved set on reload", async () => {
     await render("#10B981");
     await click("Customize bot avatar");
     expect(button("Original").getAttribute("aria-selected")).toBe("true");
     expect(document.querySelector(".rakazo-organic-avatar")).not.toBeNull();
     expect(changed).not.toHaveBeenCalled();
-    await click("Rakazo");
+    await click("Pixel");
     expect(changed).toHaveBeenLastCalledWith("#10B981", "rakazo");
     expect(document.querySelector(".rakazo-logo-avatar")).not.toBeNull();
     await render("#10B981", "rakazo", "reload");
     await click("Customize bot avatar");
-    expect(button("Rakazo").getAttribute("aria-selected")).toBe("true");
+    expect(button("Pixel").getAttribute("aria-selected")).toBe("true");
     await click("Original");
     expect(changed).toHaveBeenLastCalledWith("#10B981", "organic");
     expect(document.querySelector(".rakazo-organic-avatar")).not.toBeNull();
@@ -98,7 +104,7 @@ describe("selectable bot icon sets", () => {
     await click("Customize bot avatar");
     expect(changed).not.toHaveBeenCalled();
     expect(document.querySelector(`img[src="${photo}"]`)).not.toBeNull();
-    await click("Rakazo");
+    await click("Pixel");
     expect(changed).toHaveBeenLastCalledWith(DEFAULT_BOT_AVATAR_COLOR, "rakazo");
     expect(document.querySelector(`img[src="${photo}"]`)).toBeNull();
   });
@@ -110,7 +116,7 @@ describe("selectable bot icon sets", () => {
     await click("Color #00C972");
     expect(changed).toHaveBeenLastCalledWith("#00C972::shape_2", undefined);
     expect(button("Original").getAttribute("aria-selected")).toBe("true");
-    await click("Rakazo");
+    await click("Pixel");
     expect(changed).toHaveBeenLastCalledWith("#00C972", "rakazo");
   });
 });

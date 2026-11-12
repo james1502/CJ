@@ -173,9 +173,9 @@ describe("BotAvatar", () => {
       );
     send(1, true);
     const frame = logoAvatarFrame("thinking", logoAvatarTraits("bot-1", "#10B981"), 0, true);
-    expect(latestEye()).toMatchObject({ cx: 40.5 + frame.eyeX, cy: 49 + frame.eyeY });
+    expect(latestEye()).toMatchObject({ cx: 38 + frame.eyeX, cy: 47 + frame.eyeY });
     send(2, false);
-    expect(latestEye()).toMatchObject({ cx: 40.5, cy: 49 });
+    expect(latestEye()).toMatchObject({ cx: 38, cy: 47 });
   });
 
   it("uses the same shared seed colour as SSR for a bot without a saved colour", () => {
@@ -231,7 +231,7 @@ describe("BotAvatar", () => {
   const bodies = (view: HTMLElement) =>
     Array.from(view.querySelectorAll("path"), (path) => path.dataset.d);
 
-  it("preserves the shared native tap reactions on the Rakazo set", () => {
+  it("preserves the shared native tap reactions on the App set", () => {
     nativeMotion.reduced = false;
     const view = render("#3EC5A8", "rakazo", { pokeable: true, motion: "running" });
     const button = view.querySelector("button");
@@ -313,7 +313,7 @@ describe("BotAvatar", () => {
     expect(view.querySelectorAll("rect")).toHaveLength(2);
     expect(view.querySelector("ellipse")).toBeNull();
   });
-  it("draws the explicitly selected Rakazo set as paths and gradients without a raster image", () => {
+  it("draws the explicitly selected App set as paths and gradients without a raster image", () => {
     const view = render("#3EC5A8", "rakazo");
     expect(bodies(view)).toContain(LOGO_BODY_PATH);
     expect(bodies(view)).not.toContain(organicAvatarPath(avatarIdentitySeed("bot-1")));
@@ -322,13 +322,13 @@ describe("BotAvatar", () => {
     expect(view.querySelector("radialGradient")).not.toBeNull();
   });
 
-  it("keeps a custom picture when the stored set is Rakazo", () => {
+  it("keeps a custom picture when the stored set is App", () => {
     const view = render("data:image/png;base64,abc", "rakazo");
     expect(view.querySelector("img")?.getAttribute("src")).toBe("data:image/png;base64,abc");
     expect(bodies(view)).toEqual([]);
   });
 
-  it("keeps an explicitly selected original shape when the stored set is Rakazo", () => {
+  it("keeps an explicitly selected original shape when the stored set is App", () => {
     const view = render("#8B5CF6::shape_3", "rakazo");
     expect(bodies(view)).toEqual([shippedBotAvatarShapePath(3)]);
   });
