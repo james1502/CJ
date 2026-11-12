@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import type { AppDesktop } from "../lib/desktop.js";
+import type { RakazoDesktop } from "../lib/desktop.js";
 import { registerServiceWorker } from "./register.js";
 
-function host(desktop?: AppDesktop) {
+function host(desktop?: RakazoDesktop) {
   const register = vi.fn(async () => ({}));
   const target = new EventTarget() as EventTarget & Parameters<typeof registerServiceWorker>[0];
   Object.assign(target, {
@@ -27,7 +27,7 @@ describe("registerServiceWorker", () => {
     dev.target.dispatchEvent(new Event("load"));
     expect(dev.register).not.toHaveBeenCalled();
 
-    const electron = host({} as AppDesktop);
+    const electron = host({} as RakazoDesktop);
     registerServiceWorker(electron.target, true);
     electron.target.dispatchEvent(new Event("load"));
     expect(electron.register).not.toHaveBeenCalled();

@@ -1,22 +1,22 @@
-import type { AppDesktopSpeechEvent } from "@rakazo/contracts";
+import type { RakazoDesktopSpeechEvent } from "@rakazo/contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DesktopSpeechRecognition } from "./desktop-speech.js";
 import { Dictation } from "./dictation.js";
 
 function fakeSpeech(started: () => Promise<boolean> = async () => true) {
-  const listeners = new Set<(event: AppDesktopSpeechEvent) => void>();
+  const listeners = new Set<(event: RakazoDesktopSpeechEvent) => void>();
   const speech = {
     start: vi.fn((_language: string, _session: number) => started()),
     stop: vi.fn(async (_session: number) => undefined),
     abort: vi.fn(async (_session: number) => undefined),
-    onEvent: vi.fn((listener: (event: AppDesktopSpeechEvent) => void) => {
+    onEvent: vi.fn((listener: (event: RakazoDesktopSpeechEvent) => void) => {
       listeners.add(listener);
       return () => {
         listeners.delete(listener);
       };
     }),
   };
-  const emit = (event: AppDesktopSpeechEvent) => {
+  const emit = (event: RakazoDesktopSpeechEvent) => {
     for (const listener of [...listeners]) listener(event);
   };
   const session = () => speech.start.mock.calls.at(-1)?.[1] ?? 0;

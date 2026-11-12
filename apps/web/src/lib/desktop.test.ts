@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { AppDesktop, AppDesktopOAuthCallback } from "./desktop.js";
+import type { RakazoDesktop, RakazoDesktopOAuthCallback } from "./desktop.js";
 import {
   DARWIN_WINDOW_CONTROLS_WIDTH_PX,
   desktopOAuthCode,
@@ -8,7 +8,7 @@ import {
   windowChromeKind,
 } from "./desktop.js";
 
-function desktop(platform: string): AppDesktop {
+function desktop(platform: string): RakazoDesktop {
   const updateState = {
     phase: "unsupported" as const,
     currentVersion: "0.1.0",
@@ -72,20 +72,20 @@ describe("attempt correlation", () => {
   afterEach(() => vi.unstubAllGlobals());
 
   function bridgeEmitting() {
-    let emit: (callback: AppDesktopOAuthCallback) => void = () => undefined;
+    let emit: (callback: RakazoDesktopOAuthCallback) => void = () => undefined;
     const unsubscribe = vi.fn();
     vi.stubGlobal("window", {
       rakazoDesktop: {
         ...desktop("linux"),
         oauth: {
-          onCallback: (listener: (callback: AppDesktopOAuthCallback) => void) => {
+          onCallback: (listener: (callback: RakazoDesktopOAuthCallback) => void) => {
             emit = listener;
             return unsubscribe;
           },
         },
       },
     });
-    return { emit: (c: AppDesktopOAuthCallback) => emit(c), unsubscribe };
+    return { emit: (c: RakazoDesktopOAuthCallback) => emit(c), unsubscribe };
   }
 
   it("reads the attempt state out of the authorize URL", () => {

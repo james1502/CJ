@@ -4,22 +4,22 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type {
-  AppSetup,
   DesktopLocalStackState,
   DesktopReachability,
   DesktopSetup,
   DesktopSetupState,
+  RakazoSetup,
 } from "@rakazo/contracts";
 import { afterEach, describe, expect, it } from "vitest";
 import { ES_MESSAGES } from "./locales/es.js";
 import { HE_MESSAGES } from "./locales/he.js";
 import { PL_MESSAGES } from "./locales/pl.js";
 
-type DesktopSetupResult = Awaited<ReturnType<AppSetup["save"]>>;
+type DesktopSetupResult = Awaited<ReturnType<RakazoSetup["save"]>>;
 
 const DEFAULT_LOCAL_URL = "http://127.0.0.1:6130";
 const CLOUD_URL = "https://cloud.rakazo.example";
-const ENGLISH: AppSetup["locale"] = { lang: "en", dir: "ltr", messages: {} };
+const ENGLISH: RakazoSetup["locale"] = { lang: "en", dir: "ltr", messages: {} };
 
 // The jsdom environment replaces the global URL, so resolve the sibling files via Node's.
 const srcDir = path.dirname(fileURLToPath(import.meta.url));
@@ -101,7 +101,7 @@ function mount(saved: DesktopSetup | null, locale = ENGLISH): Harness {
   const saves: DesktopSetup[] = [];
   const saveCalls: Array<Deferred<DesktopSetupResult>> = [];
 
-  const bridge: AppSetup = {
+  const bridge: RakazoSetup = {
     platform: "linux",
     locale,
     state: () => {
@@ -134,7 +134,7 @@ function mount(saved: DesktopSetup | null, locale = ENGLISH): Harness {
       },
     },
   };
-  (window as { rakazoSetup?: AppSetup }).rakazoSetup = bridge;
+  (window as { rakazoSetup?: RakazoSetup }).rakazoSetup = bridge;
   // Run the plain script the same way setup.html's script tag does.
   new Function(setupScript)();
 
@@ -174,7 +174,7 @@ async function boot(saved: DesktopSetup | null, locale = ENGLISH): Promise<Harne
 describe("setup", () => {
   afterEach(() => {
     document.body.innerHTML = "";
-    delete (window as { rakazoSetup?: AppSetup }).rakazoSetup;
+    delete (window as { rakazoSetup?: RakazoSetup }).rakazoSetup;
   });
 
   it("keeps an address edited while the connection check is pending", async () => {

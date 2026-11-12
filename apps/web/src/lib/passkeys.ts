@@ -3,7 +3,7 @@ import { hostMatchesPasskeyRpId } from "@rakazo/core";
 import { WebAuthnAbortService } from "@simplewebauthn/browser";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { fetchAuthCapabilities } from "./auth-capabilities";
-import type { AppDesktop } from "./desktop";
+import type { RakazoDesktop } from "./desktop";
 import { desktopBridge } from "./desktop";
 import { authErrorText } from "./user-error";
 
@@ -12,7 +12,7 @@ type PasskeyBrowser = {
   credential?: {
     isUserVerifyingPlatformAuthenticatorAvailable?: () => Promise<boolean>;
   };
-  desktop?: Pick<AppDesktop, "platform" | "passkeys">;
+  desktop?: Pick<RakazoDesktop, "platform" | "passkeys">;
 };
 
 function currentBrowser(): PasskeyBrowser {

@@ -4,7 +4,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import type { HostScreen } from "@rakazo/adapters/host-screen";
 import { startUserDeviceClient } from "@rakazo/adapters/user-device-client";
-import type { AppDesktopDevice, DesktopReachability, DesktopSetup } from "@rakazo/contracts";
+import type { DesktopReachability, DesktopSetup, RakazoDesktopDevice } from "@rakazo/contracts";
 import type { BrowserWindow, Session } from "electron";
 import {
   app,
@@ -715,7 +715,7 @@ app.whenReady().then(async () => {
       ? origin
       : null;
   };
-  const deviceState = async (origin: string | null): Promise<AppDesktopDevice | null> => {
+  const deviceState = async (origin: string | null): Promise<RakazoDesktopDevice | null> => {
     const state = origin === null ? null : desktop.userDevices?.state(origin);
     return state ? { ...state, name: await deviceName() } : null;
   };

@@ -1,6 +1,6 @@
 import type { Server } from "node:http";
 import { createServer } from "node:http";
-import type { AppDesktopOAuthCallback } from "@rakazo/contracts";
+import type { RakazoDesktopOAuthCallback } from "@rakazo/contracts";
 import { t } from "./i18n.js";
 import { LOOPBACK_HOSTS } from "./oauth-callback.js";
 
@@ -10,7 +10,7 @@ export async function openBrowserAuth(
   options: {
     signal: AbortSignal;
     openExternal: (url: string) => Promise<unknown>;
-    onCallback: (callback: AppDesktopOAuthCallback) => void;
+    onCallback: (callback: RakazoDesktopOAuthCallback) => void;
     onClose?: () => void;
   },
 ): Promise<void> {

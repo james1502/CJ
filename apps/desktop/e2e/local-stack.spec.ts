@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import type { ElectronApplication } from "@playwright/test";
 import { _electron as electron, expect, test } from "@playwright/test";
-import type { AppDesktop } from "@rakazo/contracts";
+import type { RakazoDesktop } from "@rakazo/contracts";
 import { prepareHostComputer } from "../src/host-computer.js";
 import { shownWindow } from "./shown-window.js";
 
@@ -520,7 +520,7 @@ test("the desktop never exposes server administration or account impersonation",
   expect(
     await main.evaluate(
       () =>
-        "localSettings" in (window as typeof window & { rakazoDesktop: AppDesktop }).rakazoDesktop,
+        "localSettings" in (window as typeof window & { rakazoDesktop: RakazoDesktop }).rakazoDesktop,
     ),
   ).toBe(false);
   expect(

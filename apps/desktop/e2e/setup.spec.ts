@@ -8,7 +8,7 @@ import path from "node:path";
 import { promisify } from "node:util";
 import type { ElectronApplication, Page } from "@playwright/test";
 import { _electron as electron, expect, test } from "@playwright/test";
-import type { AppDesktop } from "@rakazo/contracts";
+import type { RakazoDesktop } from "@rakazo/contracts";
 import { shownWindow } from "./shown-window.js";
 
 const APP_MARKER = "Existing App instance ready";
@@ -733,7 +733,7 @@ test("the app window stays on its server when a link redirects to another site",
   const openSignIn = (page: Page) =>
     page.evaluate(
       (url) =>
-        (window as typeof window & { rakazoDesktop: AppDesktop }).rakazoDesktop.oauth.open!(
+        (window as typeof window & { rakazoDesktop: RakazoDesktop }).rakazoDesktop.oauth.open!(
           url,
         ).then(
           () => "opened",
