@@ -137,8 +137,10 @@ jobs:
           gh auth setup-git
           git push --force-with-lease="refs/heads/$BRANCH:$remote" origin "HEAD:refs/heads/$BRANCH"
           if [ -z "$pr" ]; then
-            gh pr create --base main --head "$BRANCH" --title "Update translation catalogs" \
-              --body "$(cat <<'EOF'
+            set +e
+            create_out="$(
+              gh pr create --base main --head "$BRANCH" --title "Update translation catalogs" \
+                --body "$(cat <<'EOF'
           ## What
 
           Brings the web translation catalogs up to date with the strings on main: new strings
@@ -159,5 +161,16 @@ jobs:
           Opened with the workflow token, so checks do not start on their own: close and
           reopen it to run CI.
           EOF
-          )"
+          )" 2>&1
+            )"
+            create_status=$?
+            set -e
+            printf '%s\n' "$create_out"
+            if [ "$create_status" -ne 0 ]; then
+              if grep -qi 'not permitted to create or approve pull requests' <<<"$create_out"; then
+                echo "::notice::Pushed $BRANCH, but GitHub Actions cannot open pull requests here. Enable \"Allow GitHub Actions to create and approve pull requests\" under Settings → Actions → General, then re-run this workflow (or open a PR from $BRANCH)."
+                exit 0
+              fi
+              exit "$create_status"
+            fi
           fi
