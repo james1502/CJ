@@ -74,8 +74,7 @@ export const FR_MESSAGES: Record<string, string> = {
     "Impossible d’ouvrir la connexion dans le navigateur. Fermez les autres tentatives de connexion et réessayez.",
   "Sign-in callback rejected. Return to App to retry.":
     "La réponse de connexion a été refusée. Revenez à App pour réessayer.",
-  "You can close this tab and return to App.":
-    "Vous pouvez fermer cet onglet et revenir à App.",
+  "You can close this tab and return to App.": "Vous pouvez fermer cet onglet et revenir à App.",
   "Set up App": "Configurer App",
   "Quit App": "Quitter App",
   "Welcome to App": "Bienvenue dans App",

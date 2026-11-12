@@ -73,8 +73,7 @@ export const NL_MESSAGES: Record<string, string> = {
     "Inloggen via de browser kon niet worden geopend. Sluit andere inlogpogingen en probeer het opnieuw.",
   "Sign-in callback rejected. Return to App to retry.":
     "Het inlogantwoord is geweigerd. Ga terug naar App om het opnieuw te proberen.",
-  "You can close this tab and return to App.":
-    "Je kunt dit tabblad sluiten en teruggaan naar App.",
+  "You can close this tab and return to App.": "Je kunt dit tabblad sluiten en teruggaan naar App.",
   "Set up App": "App instellen",
   "Quit App": "Stop App",
   "Welcome to App": "Welkom bij App",

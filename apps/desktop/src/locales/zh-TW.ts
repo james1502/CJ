@@ -45,8 +45,7 @@ export const ZH_TW_MESSAGES: Record<string, string> = {
   "Automatic updates are turned off for this install.": "此安裝已關閉自動更新。",
   "Automatic updates only run in an installed build.": "自動更新僅在已安裝的版本中執行。",
   "No desktop releases are published for this build yet.": "此版本尚未發佈桌面版。",
-  "Move App to Applications to install updates.":
-    "將 App 移到「應用程式」檔案夾以安裝更新項目。",
+  "Move App to Applications to install updates.": "將 App 移到「應用程式」檔案夾以安裝更新項目。",
   "Free up disk space to install updates.": "釋放磁碟空間以安裝更新項目。",
   "This update could not be verified. Reinstall App from a trusted download.":
     "無法驗證此更新項目。請從可信任的來源重新下載並安裝 App。",

@@ -1281,8 +1281,7 @@ export const RU_MESSAGES: Record<string, string> = {
   Work: "Работа",
   Both: "И то, и другое",
   "How will you use App?": "Как вы будете использовать App?",
-  "What do you most want App to help with?":
-    "С чем App должен помогать вам в первую очередь?",
+  "What do you most want App to help with?": "С чем App должен помогать вам в первую очередь?",
   "How big is your team?": "Сколько человек в вашей команде?",
   "How did you hear about us?": "Как вы о нас узнали?",
   "Welcome to App": "Добро пожаловать в App",

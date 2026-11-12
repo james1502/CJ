@@ -4,7 +4,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import type { HostScreen } from "@rakazo/adapters/host-screen";
 import { startUserDeviceClient } from "@rakazo/adapters/user-device-client";
-import type { DesktopReachability, DesktopSetup, AppDesktopDevice } from "@rakazo/contracts";
+import type { AppDesktopDevice, DesktopReachability, DesktopSetup } from "@rakazo/contracts";
 import type { BrowserWindow, Session } from "electron";
 import {
   app,

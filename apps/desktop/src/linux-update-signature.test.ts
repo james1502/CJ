@@ -138,12 +138,9 @@ describe("fetchLinuxUpdateSignature", () => {
           signal.addEventListener("abort", () => reject(signal.reason)),
         ),
     );
-    const error = await fetchLinuxUpdateSignature(
-      "1.2.3",
-      "App-1.2.3.AppImage",
-      hanging,
-      10,
-    ).catch((caught: unknown) => caught);
+    const error = await fetchLinuxUpdateSignature("1.2.3", "App-1.2.3.AppImage", hanging, 10).catch(
+      (caught: unknown) => caught,
+    );
     expect(error).toBeInstanceOf(SignatureUnreachableError);
     expect(classifyUpdaterFailure(error).kind).not.toBe("signature");
   });

@@ -16,8 +16,7 @@ export const TR_MESSAGES: Record<string, string> = {
   "This link expires in one hour. If you did not request this, you can ignore this email.":
     "Bu bağlantının süresi bir saat içinde dolar. Bunu siz istemediyseniz bu e-postayı yok sayabilirsiniz.",
   "Confirm App account deletion": "App hesabınızın silinmesini onaylayın",
-  "Enter this code in App to delete your account:":
-    "Hesabınızı silmek için bu kodu App’ya girin:",
+  "Enter this code in App to delete your account:": "Hesabınızı silmek için bu kodu App’ya girin:",
   "This code expires in ten minutes. If you did not request deletion, ignore this email.":
     "Bu kodun süresi on dakika içinde dolar. Silme isteğinde bulunmadıysanız bu e-postayı yok sayın.",
   "Your App confirmation code": "App onay kodunuz",

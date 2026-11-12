@@ -4,11 +4,11 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type {
+  AppSetup,
   DesktopLocalStackState,
   DesktopReachability,
   DesktopSetup,
   DesktopSetupState,
-  AppSetup,
 } from "@rakazo/contracts";
 import { afterEach, describe, expect, it } from "vitest";
 import { ES_MESSAGES } from "./locales/es.js";

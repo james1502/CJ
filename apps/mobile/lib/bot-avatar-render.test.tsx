@@ -173,9 +173,9 @@ describe("BotAvatar", () => {
       );
     send(1, true);
     const frame = logoAvatarFrame("thinking", logoAvatarTraits("bot-1", "#10B981"), 0, true);
-    expect(latestEye()).toMatchObject({ cx: 40.5 + frame.eyeX, cy: 49 + frame.eyeY });
+    expect(latestEye()).toMatchObject({ cx: 38 + frame.eyeX, cy: 47 + frame.eyeY });
     send(2, false);
-    expect(latestEye()).toMatchObject({ cx: 40.5, cy: 49 });
+    expect(latestEye()).toMatchObject({ cx: 38, cy: 47 });
   });
 
   it("uses the same shared seed colour as SSR for a bot without a saved colour", () => {

@@ -20,8 +20,7 @@ export const PL_MESSAGES: Record<string, string> = {
   "This code expires in ten minutes. If you did not request deletion, ignore this email.":
     "Ten kod wygaśnie za dziesięć minut. Jeśli to nie Ty prosisz o usunięcie konta, zignoruj tę wiadomość.",
   "Your App confirmation code": "Twój kod potwierdzający App",
-  "Enter this code in App to confirm it's you:":
-    "Wpisz ten kod w App, aby potwierdzić tożsamość:",
+  "Enter this code in App to confirm it's you:": "Wpisz ten kod w App, aby potwierdzić tożsamość:",
   "Welcome to App": "Witaj w App",
   "Thanks for signing up for App.": "Dziękujemy za rejestrację w App.",
   "App also has apps for": "Aplikacje App są też dostępne na platformach:",

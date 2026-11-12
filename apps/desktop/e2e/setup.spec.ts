@@ -176,9 +176,7 @@ test("setup opens in the language the app last used", async () => {
   const setup = await app.firstWindow();
 
   await expect(setup.locator("html")).toHaveAttribute("lang", "es");
-  await expect(
-    setup.getByRole("heading", { name: "Te damos la bienvenida a App" }),
-  ).toBeVisible();
+  await expect(setup.getByRole("heading", { name: "Te damos la bienvenida a App" })).toBeVisible();
   await expect(setup.getByRole("button", { name: "Continuar" })).toBeEnabled();
   await setup.screenshot({
     path: path.join(import.meta.dirname, "screenshots", "10-setup-spanish.png"),

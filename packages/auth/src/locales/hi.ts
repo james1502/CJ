@@ -51,8 +51,7 @@ export const HI_MESSAGES: Record<string, string> = {
     "अगर आपने कोई प्लगइन नहीं भेजा है, तो इस ईमेल को अनदेखा करें।",
   "{name} is in the App marketplace": "{name} App मार्केटप्लेस में है",
   "Your App plugin submission: {name}": "आपका App प्लगइन सबमिशन: {name}",
-  "{name} is now listed in the App plugin marketplace.":
-    "{name} अब App प्लगइन मार्केटप्लेस में लिस्ट है।",
+  "{name} is now listed in the App plugin marketplace.": "{name} अब App प्लगइन मार्केटप्लेस में लिस्ट है।",
   "We couldn't list {name} in the App plugin marketplace.":
     "हम {name} को App प्लगइन मार्केटप्लेस में लिस्ट नहीं कर सके।",
   "Confirm your App page claim": "App पर अपने पेज दावे की पुष्टि करें",

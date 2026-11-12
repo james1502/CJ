@@ -121,8 +121,7 @@ export const RU_MESSAGES: Record<string, string> = {
   "Invalid custom headers": "Недопустимые пользовательские заголовки",
   "That address redirects elsewhere. Enter the final App server address.":
     "Этот адрес перенаправляет в другое место. Введите конечный адрес сервера App.",
-  "That address did not respond like a App server.":
-    "Этот адрес ответил не так, как сервер App.",
+  "That address did not respond like a App server.": "Этот адрес ответил не так, как сервер App.",
   "The server answered with HTTP {status}.": "Сервер ответил с кодом HTTP {status}.",
   "Timed out reaching that address.": "Истекло время ожидания ответа по этому адресу.",
   "Nothing is listening at that address yet.": "По этому адресу пока ничего не отвечает.",

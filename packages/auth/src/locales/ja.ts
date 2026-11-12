@@ -7,8 +7,7 @@ export const JA_MESSAGES: Record<string, string> = {
   "This link expires in one hour. If you did not register, ignore this email.":
     "このリンクの有効期限は1時間です。登録した覚えがない場合は、このメールを無視してください。",
   "Your App sign-in code": "Appのサインインコード",
-  "Enter this code to sign in to App:":
-    "Appにサインインするには、次のコードを入力してください:",
+  "Enter this code to sign in to App:": "Appにサインインするには、次のコードを入力してください:",
   "This code expires in ten minutes. If you did not request it, ignore this email.":
     "このコードの有効期限は10分です。リクエストした覚えがない場合は、このメールを無視してください。",
   "Reset your App password": "Appのパスワードをリセット",

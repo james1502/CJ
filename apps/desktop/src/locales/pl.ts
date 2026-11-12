@@ -130,8 +130,7 @@ export const PL_MESSAGES: Record<string, string> = {
   "Invalid custom headers": "Nieprawidłowe nagłówki niestandardowe",
   "That address redirects elsewhere. Enter the final App server address.":
     "Ten adres przekierowuje w inne miejsce. Wpisz docelowy adres serwera App.",
-  "That address did not respond like a App server.":
-    "Ten adres nie odpowiedział jak serwer App.",
+  "That address did not respond like a App server.": "Ten adres nie odpowiedział jak serwer App.",
   "The server answered with HTTP {status}.": "Serwer odpowiedział kodem HTTP {status}.",
   "Timed out reaching that address.": "Przekroczono czas oczekiwania na połączenie z tym adresem.",
   "Nothing is listening at that address yet.": "Pod tym adresem nie działa jeszcze żadna usługa.",
