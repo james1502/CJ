@@ -701,7 +701,6 @@ msgstr "Gib einen Servernamen ein."
 msgid "Add a stdio command."
 msgstr "Gib einen stdio-Befehl ein."
 
-#: src/pages/RoutineEditor.tsx
 #: src/pages/shell/use-routine-editor.ts
 msgid "Add a trigger to run this routine."
 msgstr "Füge einen Auslöser für diese Routine hinzu."
@@ -813,12 +812,12 @@ msgstr "Adresszeile 2"
 msgid "Adds"
 msgstr "Enthält"
 
+#: src/lib/cron.ts
 #: src/pages/McpServerForm.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/ModelSettingsOverlay.tsx
 #: src/pages/onboarding/model-step.tsx
 #: src/pages/routine-editor/model-settings.tsx
-#: src/pages/RoutineSchedule.tsx
 #: src/pages/shell/bot-panel.tsx
 msgid "Advanced"
 msgstr "Erweitert"
@@ -866,6 +865,10 @@ msgstr "Gesamter Zeitraum"
 msgid "Allow"
 msgstr "Erlauben"
 
+#: src/lib/dictation.ts
+msgid "Allow App to use Speech Recognition and the microphone in System Settings."
+msgstr "Erlaube App in den Systemeinstellungen, die Spracherkennung und das Mikrofon zu verwenden."
+
 #: src/pages/shell/bot-settings-sections.tsx
 msgid "Allow cross-space bot communication"
 msgstr "Kommunikation zwischen Bots in verschiedenen Spaces erlauben"
@@ -877,10 +880,6 @@ msgstr "In diesem Space erlauben"
 #: src/components/AskCard.tsx
 msgid "Allow once"
 msgstr "Einmal erlauben"
-
-#: src/lib/dictation.ts
-msgid "Allow App to use Speech Recognition and the microphone in System Settings."
-msgstr "Erlaube App in den Systemeinstellungen, die Spracherkennung und das Mikrofon zu verwenden."
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
 msgid "Allow writing"
@@ -1026,6 +1025,10 @@ msgstr "API-Token"
 #: src/components/ComputerProviderSettings.tsx
 msgid "API URL"
 msgstr "API-URL"
+
+#: src/pages/onboarding/use-onboarding-model.ts
+msgid "App credits"
+msgstr "App-Guthaben"
 
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Appearance"
@@ -1175,8 +1178,8 @@ msgid "Automated senders"
 msgstr "Automatisierte Absender"
 
 #: src/pages/routine-editor/trigger-cards.tsx
-msgid "Available after the routine is saved"
-msgstr "Verfügbar, nachdem die Routine gespeichert wurde"
+msgid "Available after saving"
+msgstr ""
 
 #: src/components/ModelCredits.tsx
 msgid "Available credits"
@@ -2072,6 +2075,7 @@ msgstr "Unterhaltungen"
 #: src/components/vault/VaultItemDetail.tsx
 #: src/pages/model-settings/connection-controls.tsx
 #: src/pages/onboarding/model-step.tsx
+#: src/pages/routine-editor/trigger-cards.tsx
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/message-hover-actions.tsx
 msgid "Copied"
@@ -2088,6 +2092,10 @@ msgstr "Kopieren"
 #: src/components/vault/BotEmailAddresses.tsx
 msgid "Copy {address}"
 msgstr "{address} kopieren"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Copy {label}"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Copy code"
@@ -2632,6 +2640,10 @@ msgstr "Senden fehlgeschlagen"
 msgid "Could not show the credential"
 msgstr "Zugangsdaten konnten nicht angezeigt werden"
 
+#: src/pages/shell/use-routine-editor.ts
+msgid "Could not show the webhook key"
+msgstr ""
+
 #: src/components/integrations/plugin-marketplace.tsx
 msgid "Could not sign in"
 msgstr "Anmeldung fehlgeschlagen"
@@ -2781,8 +2793,8 @@ msgid "Create organization"
 msgstr "Organisation erstellen"
 
 #: src/pages/RoutineList.tsx
-msgid "Create Routine"
-msgstr "Routine erstellen"
+msgid "Create routine"
+msgstr ""
 
 #: src/components/AskCard.tsx
 #: src/pages/shell/dialogs.tsx
@@ -3353,14 +3365,10 @@ msgid "Every bot in this space reads these notes and keeps them up to date."
 msgstr "Alle Bots in diesem Space lesen diese Notizen und halten sie aktuell."
 
 #: src/lib/cron.ts
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
 msgid "Every day"
 msgstr "Jeden Tag"
 
 #: src/lib/cron.ts
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
 msgid "Every hour"
 msgstr "Jede Stunde"
 
@@ -3376,16 +3384,6 @@ msgstr "Jede Nachricht"
 #: src/lib/cron.ts
 msgid "Every Monday"
 msgstr "Jeden Montag"
-
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
-msgid "Every month"
-msgstr "Jeden Monat"
-
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
-msgid "Every week"
-msgstr "Jede Woche"
 
 #: src/components/SharedSpaceRules.tsx
 msgid "Everyone here sees its chats, bots and memory"
@@ -3704,8 +3702,8 @@ msgid "Hang up, then enter the code on screen."
 msgstr "Lege auf und gib dann den Code auf dem Bildschirm ein."
 
 #: src/pages/routine-editor/trigger-cards.tsx
-msgid "header"
-msgstr "Header"
+msgid "Header"
+msgstr ""
 
 #: src/components/vault/VaultItemDetail.tsx
 msgid "Header \"{header}\""
@@ -3742,6 +3740,10 @@ msgstr "Verborgen"
 #: src/components/vault/VaultItemDetail.tsx
 msgid "Hide"
 msgstr "Ausblenden"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Hide key"
+msgstr ""
 
 #: src/components/I18nBootstrap.tsx
 msgid "Hide password"
@@ -3945,8 +3947,7 @@ msgstr "Integrationsdomain"
 msgid "Integrations"
 msgstr "Integrationen"
 
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
+#: src/lib/cron.ts
 msgid "Interval"
 msgstr "Intervall"
 
@@ -4037,8 +4038,8 @@ msgid "Keep tool results whole"
 msgstr "Tool-Ergebnisse vollständig behalten"
 
 #: src/pages/routine-editor/trigger-cards.tsx
-msgid "key"
-msgstr "Schlüssel"
+msgid "Key options"
+msgstr ""
 
 #: src/pages/shell/keyboard-shortcuts-dialog.tsx
 #: src/pages/shell/use-palette-actions.ts
@@ -4548,6 +4549,10 @@ msgstr "Monatliches Guthaben"
 msgid "Monthly credits expire at renewal. Top-ups do not expire."
 msgstr "Monatliches Guthaben verfällt bei der Verlängerung. Aufladungen verfallen nicht."
 
+#: src/lib/cron.ts
+msgid "Monthly on the 1st"
+msgstr ""
+
 #: src/components/SpaceMembersSettings.tsx
 #: src/pages/plugins/plugin-browse.tsx
 #: src/pages/PluginsOverlay.tsx
@@ -4865,6 +4870,10 @@ msgstr "Ohne Zurücksetzen"
 msgid "No results"
 msgstr "Keine Ergebnisse"
 
+#: src/pages/RoutineList.tsx
+msgid "No routines yet"
+msgstr ""
+
 #: src/components/markdown-copy.tsx
 msgid "No rows"
 msgstr "Keine Zeilen"
@@ -4873,7 +4882,7 @@ msgstr "Keine Zeilen"
 msgid "No runs match these filters."
 msgstr "Keine Ausführungen entsprechen diesen Filtern."
 
-#: src/pages/RoutineRunHistory.tsx
+#: src/pages/ActivityList.tsx
 msgid "No runs yet"
 msgstr "Noch keine Ausführungen"
 
@@ -4983,6 +4992,7 @@ msgid "Offline"
 msgstr "Offline"
 
 #: src/pages/routine-editor/add-trigger-menu.tsx
+#: src/pages/RoutineSchedule.tsx
 msgid "On a schedule"
 msgstr "Nach Zeitplan"
 
@@ -5014,6 +5024,10 @@ msgstr "Gib nur einen Code ein, den dir {codeHost} gesendet hat."
 #: src/pages/routine-editor/trigger-cards.tsx
 msgid "Only me"
 msgstr "Nur ich"
+
+#: src/pages/shell/use-routine-editor.ts
+msgid "Only the bot's creator can see its webhook key."
+msgstr ""
 
 #: src/pages/shell/use-routine-editor.ts
 msgid "Only the bot's creator can set its webhook key."
@@ -5052,6 +5066,12 @@ msgstr "{title} öffnen"
 msgid "Open <0>{0}</0> and enter this code:"
 msgstr "Öffne <0>{0}</0> und gib diesen Code ein:"
 
+#: src/components/pages/PublicPageShell.tsx
+#: src/pages/Invite.tsx
+#: src/pages/SharedPage.tsx
+msgid "Open App"
+msgstr "App öffnen"
+
 #: src/pages/shell/chat-header.tsx
 msgid "Open call"
 msgstr "Anruf öffnen"
@@ -5080,12 +5100,6 @@ msgstr "Link öffnen"
 #: src/pages/shell/chat-header.tsx
 msgid "Open navigation"
 msgstr "Navigation öffnen"
-
-#: src/components/pages/PublicPageShell.tsx
-#: src/pages/Invite.tsx
-#: src/pages/SharedPage.tsx
-msgid "Open App"
-msgstr "App öffnen"
 
 #: src/pages/ScratchpadSection.tsx
 msgid "Open work"
@@ -5341,6 +5355,11 @@ msgstr "Anheften"
 msgid "Pinned"
 msgstr "Angeheftet"
 
+#: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Pixel"
+msgstr "Pixel"
+
 #: src/components/ModelCredits.tsx
 msgid "Plan"
 msgstr "Plan"
@@ -5373,10 +5392,6 @@ msgstr "Plugins"
 #: src/pages/routine-editor/trigger-cards.tsx
 msgid "Post \"No changes\" in chat"
 msgstr "„Keine Änderungen“ im Chat posten"
-
-#: src/pages/routine-editor/trigger-cards.tsx
-msgid "POST to"
-msgstr "POST an"
 
 #: src/components/bot-templates/bot-template-copy.ts
 msgid "PR reviewer"
@@ -5457,15 +5472,6 @@ msgstr "Pull Request"
 #: src/pages/ActivityList.tsx
 msgid "Queued"
 msgstr "In Warteschlange"
-
-#: src/pages/AccountSettingsOverlay.tsx
-#: src/pages/shell/avatar-studio-popover.tsx
-msgid "Pixel"
-msgstr "Pixel"
-
-#: src/pages/onboarding/use-onboarding-model.ts
-msgid "App credits"
-msgstr "App-Guthaben"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
 msgid "rakazo-shared and IDs starting with bot- are reserved for App."
@@ -5727,7 +5733,7 @@ msgstr "Header entfernen"
 msgid "Remove message trigger"
 msgstr "Nachrichtenauslöser entfernen"
 
-#: src/pages/RoutineEditor.tsx
+#: src/pages/RoutineSchedule.tsx
 msgid "Remove schedule"
 msgstr "Zeitplan entfernen"
 
@@ -5930,15 +5936,15 @@ msgstr "Jetzt erneut versuchen"
 msgid "Retry screen"
 msgstr "Bildschirm erneut laden"
 
-#. placeholder {0}: call.botName
-#: src/components/call/CallCard.tsx
-msgid "Return to call with {0}"
-msgstr "Zurück zum Anruf mit {0}"
-
 #: src/pages/McpOAuthCallback.tsx
 #: src/pages/SlackInstallCallback.tsx
 msgid "Return to App"
 msgstr "Zurück zu App"
+
+#. placeholder {0}: call.botName
+#: src/components/call/CallCard.tsx
+msgid "Return to call with {0}"
+msgstr "Zurück zum Anruf mit {0}"
 
 #: src/lib/model-connection-preflight.ts
 msgid "Review provider settings and test again."
@@ -5992,6 +5998,10 @@ msgstr "Ausführen um"
 #: src/pages/RoutineRunHistory.tsx
 msgid "Run history"
 msgstr "Ausführungsverlauf"
+
+#: src/pages/RoutineEditor.tsx
+msgid "Run now"
+msgstr ""
 
 #: src/pages/shell/use-routine-editor.ts
 msgid "Run time must be in the future."
@@ -6082,10 +6092,6 @@ msgstr "Gespeichert, aber die Liste konnte nicht aktualisiert werden"
 #: src/pages/model-settings/use-model-settings.ts
 msgid "Saved."
 msgstr "Gespeichert."
-
-#: src/pages/routine-editor/trigger-cards.tsx
-msgid "Saved. Rotate to reveal."
-msgstr "Gespeichert. Rotiere, um ihn anzuzeigen."
 
 #: src/components/ComputerUpdateProgress.tsx
 msgid "Saving your workspace"
@@ -6210,6 +6216,10 @@ msgstr "Suche: {0}"
 #: src/pages/SpaceSearch.tsx
 msgid "Searching…"
 msgstr "Suche…"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Secret"
+msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Security"
@@ -6383,6 +6393,10 @@ msgstr "Alle anzeigen"
 #: src/pages/shell/sidebar-header.tsx
 msgid "Show bots"
 msgstr "Bots anzeigen"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Show key"
+msgstr ""
 
 #: src/pages/Artifacts.tsx
 msgid "Show list"
@@ -6857,10 +6871,6 @@ msgstr "API-Schlüssel testen"
 #: src/pages/McpServersOverlay.tsx
 msgid "Test connection"
 msgstr "Verbindung testen"
-
-#: src/pages/RoutineEditor.tsx
-msgid "Test run"
-msgstr "Testlauf"
 
 #: src/pages/PluginSubmissionsPanel.tsx
 msgid "Testing"
@@ -7425,6 +7435,10 @@ msgstr "Hochladen"
 msgid "Urgent"
 msgstr "Dringend"
 
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "URL"
+msgstr ""
+
 #: src/pages/settings-nav.ts
 msgid "Usage"
 msgstr "Nutzung"
@@ -7451,6 +7465,10 @@ msgstr "Verwende 2 bis 64 Zeichen"
 #: src/pages/onboarding/model-step.tsx
 msgid "Use a found model"
 msgstr "Gefundenes Modell verwenden"
+
+#: src/components/ModelCredits.tsx
+msgid "Use App credits"
+msgstr "App-Guthaben verwenden"
 
 #: src/lib/model-connection-preflight.ts
 msgid "Use Connect to verify the key."
@@ -7483,10 +7501,6 @@ msgstr "Mein Abonnement oder meinen API-Schlüssel verwenden"
 #: src/components/teach/TeachRecordingChrome.tsx
 msgid "Use Protected input for passwords."
 msgstr "Verwende „Geschützte Eingabe“ für Passwörter."
-
-#: src/components/ModelCredits.tsx
-msgid "Use App credits"
-msgstr "App-Guthaben verwenden"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
 msgid "Use up to 512 letters, digits, _ or -."
@@ -7619,8 +7633,6 @@ msgid "week"
 msgstr "Woche"
 
 #: src/lib/cron.ts
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
 msgid "Weekdays"
 msgstr "Wochentage"
 

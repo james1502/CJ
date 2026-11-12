@@ -701,7 +701,6 @@ msgstr "서버 이름을 입력하세요."
 msgid "Add a stdio command."
 msgstr "stdio 명령을 입력하세요."
 
-#: src/pages/RoutineEditor.tsx
 #: src/pages/shell/use-routine-editor.ts
 msgid "Add a trigger to run this routine."
 msgstr "이 루틴을 실행할 트리거를 추가하세요."
@@ -813,12 +812,12 @@ msgstr "주소 2"
 msgid "Adds"
 msgstr "추가 항목"
 
+#: src/lib/cron.ts
 #: src/pages/McpServerForm.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/ModelSettingsOverlay.tsx
 #: src/pages/onboarding/model-step.tsx
 #: src/pages/routine-editor/model-settings.tsx
-#: src/pages/RoutineSchedule.tsx
 #: src/pages/shell/bot-panel.tsx
 msgid "Advanced"
 msgstr "고급 설정"
@@ -866,6 +865,10 @@ msgstr "전체 기간"
 msgid "Allow"
 msgstr "허용"
 
+#: src/lib/dictation.ts
+msgid "Allow App to use Speech Recognition and the microphone in System Settings."
+msgstr "시스템 설정에서 App가 음성 인식과 마이크를 사용하도록 허용하세요."
+
 #: src/pages/shell/bot-settings-sections.tsx
 msgid "Allow cross-space bot communication"
 msgstr "스페이스 간 봇 통신 허용"
@@ -877,10 +880,6 @@ msgstr "이 스페이스에서 허용"
 #: src/components/AskCard.tsx
 msgid "Allow once"
 msgstr "한 번 허용"
-
-#: src/lib/dictation.ts
-msgid "Allow App to use Speech Recognition and the microphone in System Settings."
-msgstr "시스템 설정에서 App가 음성 인식과 마이크를 사용하도록 허용하세요."
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
 msgid "Allow writing"
@@ -1026,6 +1025,10 @@ msgstr "API 토큰"
 #: src/components/ComputerProviderSettings.tsx
 msgid "API URL"
 msgstr "API URL"
+
+#: src/pages/onboarding/use-onboarding-model.ts
+msgid "App credits"
+msgstr "App 크레딧"
 
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Appearance"
@@ -1175,8 +1178,8 @@ msgid "Automated senders"
 msgstr "자동 발신자"
 
 #: src/pages/routine-editor/trigger-cards.tsx
-msgid "Available after the routine is saved"
-msgstr "루틴을 저장한 후 사용할 수 있습니다"
+msgid "Available after saving"
+msgstr ""
 
 #: src/components/ModelCredits.tsx
 msgid "Available credits"
@@ -2072,6 +2075,7 @@ msgstr "대화"
 #: src/components/vault/VaultItemDetail.tsx
 #: src/pages/model-settings/connection-controls.tsx
 #: src/pages/onboarding/model-step.tsx
+#: src/pages/routine-editor/trigger-cards.tsx
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/message-hover-actions.tsx
 msgid "Copied"
@@ -2088,6 +2092,10 @@ msgstr "복사"
 #: src/components/vault/BotEmailAddresses.tsx
 msgid "Copy {address}"
 msgstr "{address} 복사"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Copy {label}"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Copy code"
@@ -2632,6 +2640,10 @@ msgstr "메시지를 보내지 못했습니다."
 msgid "Could not show the credential"
 msgstr "자격 증명을 표시할 수 없습니다"
 
+#: src/pages/shell/use-routine-editor.ts
+msgid "Could not show the webhook key"
+msgstr ""
+
 #: src/components/integrations/plugin-marketplace.tsx
 msgid "Could not sign in"
 msgstr "로그인하지 못했습니다"
@@ -2781,8 +2793,8 @@ msgid "Create organization"
 msgstr "조직 만들기"
 
 #: src/pages/RoutineList.tsx
-msgid "Create Routine"
-msgstr "자동 실행 만들기"
+msgid "Create routine"
+msgstr ""
 
 #: src/components/AskCard.tsx
 #: src/pages/shell/dialogs.tsx
@@ -3353,14 +3365,10 @@ msgid "Every bot in this space reads these notes and keeps them up to date."
 msgstr "이 공간의 모든 봇이 이 메모를 읽고 최신 상태로 유지합니다."
 
 #: src/lib/cron.ts
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
 msgid "Every day"
 msgstr "매일"
 
 #: src/lib/cron.ts
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
 msgid "Every hour"
 msgstr "매시간"
 
@@ -3376,16 +3384,6 @@ msgstr "모든 메시지"
 #: src/lib/cron.ts
 msgid "Every Monday"
 msgstr "매주 월요일"
-
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
-msgid "Every month"
-msgstr "매월"
-
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
-msgid "Every week"
-msgstr "매주"
 
 #: src/components/SharedSpaceRules.tsx
 msgid "Everyone here sees its chats, bots and memory"
@@ -3704,8 +3702,8 @@ msgid "Hang up, then enter the code on screen."
 msgstr "전화를 끊은 다음 화면에 표시된 코드를 입력하세요."
 
 #: src/pages/routine-editor/trigger-cards.tsx
-msgid "header"
-msgstr "header"
+msgid "Header"
+msgstr ""
 
 #: src/components/vault/VaultItemDetail.tsx
 msgid "Header \"{header}\""
@@ -3742,6 +3740,10 @@ msgstr "숨김"
 #: src/components/vault/VaultItemDetail.tsx
 msgid "Hide"
 msgstr "숨기기"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Hide key"
+msgstr ""
 
 #: src/components/I18nBootstrap.tsx
 msgid "Hide password"
@@ -3945,8 +3947,7 @@ msgstr "연동 도메인"
 msgid "Integrations"
 msgstr "앱·도구 연동"
 
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
+#: src/lib/cron.ts
 msgid "Interval"
 msgstr "간격"
 
@@ -4037,8 +4038,8 @@ msgid "Keep tool results whole"
 msgstr "도구 결과 전체 유지"
 
 #: src/pages/routine-editor/trigger-cards.tsx
-msgid "key"
-msgstr "key"
+msgid "Key options"
+msgstr ""
 
 #: src/pages/shell/keyboard-shortcuts-dialog.tsx
 #: src/pages/shell/use-palette-actions.ts
@@ -4548,6 +4549,10 @@ msgstr "월간 크레딧"
 msgid "Monthly credits expire at renewal. Top-ups do not expire."
 msgstr "월간 크레딧은 갱신 시 만료됩니다. 충전한 크레딧은 만료되지 않습니다."
 
+#: src/lib/cron.ts
+msgid "Monthly on the 1st"
+msgstr ""
+
 #: src/components/SpaceMembersSettings.tsx
 #: src/pages/plugins/plugin-browse.tsx
 #: src/pages/PluginsOverlay.tsx
@@ -4865,6 +4870,10 @@ msgstr "초기화 안 함"
 msgid "No results"
 msgstr "검색 결과가 없습니다"
 
+#: src/pages/RoutineList.tsx
+msgid "No routines yet"
+msgstr ""
+
 #: src/components/markdown-copy.tsx
 msgid "No rows"
 msgstr "행 없음"
@@ -4873,7 +4882,7 @@ msgstr "행 없음"
 msgid "No runs match these filters."
 msgstr "이 필터와 일치하는 실행이 없습니다."
 
-#: src/pages/RoutineRunHistory.tsx
+#: src/pages/ActivityList.tsx
 msgid "No runs yet"
 msgstr "아직 실행 기록이 없습니다"
 
@@ -4983,6 +4992,7 @@ msgid "Offline"
 msgstr "오프라인"
 
 #: src/pages/routine-editor/add-trigger-menu.tsx
+#: src/pages/RoutineSchedule.tsx
 msgid "On a schedule"
 msgstr "일정에 따라"
 
@@ -5014,6 +5024,10 @@ msgstr "{codeHost}에서 보낸 코드만 입력하세요."
 #: src/pages/routine-editor/trigger-cards.tsx
 msgid "Only me"
 msgstr "나만"
+
+#: src/pages/shell/use-routine-editor.ts
+msgid "Only the bot's creator can see its webhook key."
+msgstr ""
 
 #: src/pages/shell/use-routine-editor.ts
 msgid "Only the bot's creator can set its webhook key."
@@ -5052,6 +5066,12 @@ msgstr "{title} 열기"
 msgid "Open <0>{0}</0> and enter this code:"
 msgstr "<0>{0}</0>을(를) 열고 이 코드를 입력하세요:"
 
+#: src/components/pages/PublicPageShell.tsx
+#: src/pages/Invite.tsx
+#: src/pages/SharedPage.tsx
+msgid "Open App"
+msgstr "App 열기"
+
 #: src/pages/shell/chat-header.tsx
 msgid "Open call"
 msgstr "통화 열기"
@@ -5080,12 +5100,6 @@ msgstr "링크 열기"
 #: src/pages/shell/chat-header.tsx
 msgid "Open navigation"
 msgstr "메뉴 열기"
-
-#: src/components/pages/PublicPageShell.tsx
-#: src/pages/Invite.tsx
-#: src/pages/SharedPage.tsx
-msgid "Open App"
-msgstr "App 열기"
 
 #: src/pages/ScratchpadSection.tsx
 msgid "Open work"
@@ -5341,6 +5355,11 @@ msgstr "고정"
 msgid "Pinned"
 msgstr "고정됨"
 
+#: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Pixel"
+msgstr "Pixel"
+
 #: src/components/ModelCredits.tsx
 msgid "Plan"
 msgstr "요금제"
@@ -5373,10 +5392,6 @@ msgstr "플러그인"
 #: src/pages/routine-editor/trigger-cards.tsx
 msgid "Post \"No changes\" in chat"
 msgstr "채팅에 “변경 없음” 게시"
-
-#: src/pages/routine-editor/trigger-cards.tsx
-msgid "POST to"
-msgstr "POST 대상"
 
 #: src/components/bot-templates/bot-template-copy.ts
 msgid "PR reviewer"
@@ -5457,15 +5472,6 @@ msgstr "풀 리퀘스트"
 #: src/pages/ActivityList.tsx
 msgid "Queued"
 msgstr "대기 중"
-
-#: src/pages/AccountSettingsOverlay.tsx
-#: src/pages/shell/avatar-studio-popover.tsx
-msgid "Pixel"
-msgstr "Pixel"
-
-#: src/pages/onboarding/use-onboarding-model.ts
-msgid "App credits"
-msgstr "App 크레딧"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
 msgid "rakazo-shared and IDs starting with bot- are reserved for App."
@@ -5727,7 +5733,7 @@ msgstr "헤더 삭제"
 msgid "Remove message trigger"
 msgstr "메시지 트리거 제거"
 
-#: src/pages/RoutineEditor.tsx
+#: src/pages/RoutineSchedule.tsx
 msgid "Remove schedule"
 msgstr "일정 제거"
 
@@ -5930,15 +5936,15 @@ msgstr "지금 다시 시도"
 msgid "Retry screen"
 msgstr "화면 다시 시도"
 
-#. placeholder {0}: call.botName
-#: src/components/call/CallCard.tsx
-msgid "Return to call with {0}"
-msgstr "{0}과(와)의 통화로 돌아가기"
-
 #: src/pages/McpOAuthCallback.tsx
 #: src/pages/SlackInstallCallback.tsx
 msgid "Return to App"
 msgstr "App로 돌아가기"
+
+#. placeholder {0}: call.botName
+#: src/components/call/CallCard.tsx
+msgid "Return to call with {0}"
+msgstr "{0}과(와)의 통화로 돌아가기"
 
 #: src/lib/model-connection-preflight.ts
 msgid "Review provider settings and test again."
@@ -5992,6 +5998,10 @@ msgstr "실행 시간"
 #: src/pages/RoutineRunHistory.tsx
 msgid "Run history"
 msgstr "실행 기록"
+
+#: src/pages/RoutineEditor.tsx
+msgid "Run now"
+msgstr ""
 
 #: src/pages/shell/use-routine-editor.ts
 msgid "Run time must be in the future."
@@ -6082,10 +6092,6 @@ msgstr "저장했지만 목록을 새로고침하지 못했습니다."
 #: src/pages/model-settings/use-model-settings.ts
 msgid "Saved."
 msgstr "저장되었습니다."
-
-#: src/pages/routine-editor/trigger-cards.tsx
-msgid "Saved. Rotate to reveal."
-msgstr "저장되었습니다. key를 교체하면 표시됩니다."
 
 #: src/components/ComputerUpdateProgress.tsx
 msgid "Saving your workspace"
@@ -6210,6 +6216,10 @@ msgstr "검색: {0}"
 #: src/pages/SpaceSearch.tsx
 msgid "Searching…"
 msgstr "검색 중…"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Secret"
+msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Security"
@@ -6383,6 +6393,10 @@ msgstr "모두 보기"
 #: src/pages/shell/sidebar-header.tsx
 msgid "Show bots"
 msgstr "봇 표시"
+
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "Show key"
+msgstr ""
 
 #: src/pages/Artifacts.tsx
 msgid "Show list"
@@ -6857,10 +6871,6 @@ msgstr "API 키 테스트"
 #: src/pages/McpServersOverlay.tsx
 msgid "Test connection"
 msgstr "연결 테스트"
-
-#: src/pages/RoutineEditor.tsx
-msgid "Test run"
-msgstr "테스트 실행"
 
 #: src/pages/PluginSubmissionsPanel.tsx
 msgid "Testing"
@@ -7425,6 +7435,10 @@ msgstr "업로드"
 msgid "Urgent"
 msgstr "긴급"
 
+#: src/pages/routine-editor/trigger-cards.tsx
+msgid "URL"
+msgstr ""
+
 #: src/pages/settings-nav.ts
 msgid "Usage"
 msgstr "사용량"
@@ -7451,6 +7465,10 @@ msgstr "2~64자를 사용하세요"
 #: src/pages/onboarding/model-step.tsx
 msgid "Use a found model"
 msgstr "찾은 모델 중에서 선택"
+
+#: src/components/ModelCredits.tsx
+msgid "Use App credits"
+msgstr "App 크레딧 사용"
 
 #: src/lib/model-connection-preflight.ts
 msgid "Use Connect to verify the key."
@@ -7483,10 +7501,6 @@ msgstr "내 구독 또는 API 키 사용"
 #: src/components/teach/TeachRecordingChrome.tsx
 msgid "Use Protected input for passwords."
 msgstr "비밀번호는 보호된 입력을 사용하세요."
-
-#: src/components/ModelCredits.tsx
-msgid "Use App credits"
-msgstr "App 크레딧 사용"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
 msgid "Use up to 512 letters, digits, _ or -."
@@ -7619,8 +7633,6 @@ msgid "week"
 msgstr "주"
 
 #: src/lib/cron.ts
-#: src/pages/routine-editor/add-trigger-menu.tsx
-#: src/pages/RoutineSchedule.tsx
 msgid "Weekdays"
 msgstr "주중"
 
