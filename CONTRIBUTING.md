@@ -1,6 +1,6 @@
-# Contributing to Rakazo
+# Contributing to App
 
-Thanks for helping improve Rakazo. Keep changes focused and testable.
+Thanks for helping improve App. Keep changes focused and testable.
 
 ## Run locally
 

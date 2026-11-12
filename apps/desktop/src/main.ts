@@ -4,7 +4,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import type { HostScreen } from "@rakazo/adapters/host-screen";
 import { startUserDeviceClient } from "@rakazo/adapters/user-device-client";
-import type { DesktopReachability, DesktopSetup, RakazoDesktopDevice } from "@rakazo/contracts";
+import type { DesktopReachability, DesktopSetup, AppDesktopDevice } from "@rakazo/contracts";
 import type { BrowserWindow, Session } from "electron";
 import {
   app,
@@ -76,7 +76,7 @@ import { installSessionPermissions } from "./session-permissions.js";
 import {
   DEFAULT_LOCAL_WEB_URL,
   desktopStackImageTag,
-  isRakazoHealth,
+  isAppHealth,
   managedLocalOpenUrl,
   maySendDesktopStackToken,
   normalizeServerUrl,
@@ -175,7 +175,7 @@ async function probeServer(
         ok: false,
         status: response.status,
         url,
-        error: t("That address redirects elsewhere. Enter the final Rakazo server address."),
+        error: t("That address redirects elsewhere. Enter the final App server address."),
       };
     }
     if (!response.ok) {
@@ -187,12 +187,12 @@ async function probeServer(
       };
     }
     const health = await readProbeJson(response);
-    if (!isRakazoHealth(health)) {
+    if (!isAppHealth(health)) {
       return {
         ok: false,
         status: response.status,
         url,
-        error: t("That address did not respond like a Rakazo server."),
+        error: t("That address did not respond like a App server."),
       };
     }
     return {
@@ -715,7 +715,7 @@ app.whenReady().then(async () => {
       ? origin
       : null;
   };
-  const deviceState = async (origin: string | null): Promise<RakazoDesktopDevice | null> => {
+  const deviceState = async (origin: string | null): Promise<AppDesktopDevice | null> => {
     const state = origin === null ? null : desktop.userDevices?.state(origin);
     return state ? { ...state, name: await deviceName() } : null;
   };

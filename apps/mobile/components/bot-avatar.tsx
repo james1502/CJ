@@ -130,12 +130,12 @@ export interface BotAvatarProps {
 /** Missing set metadata deliberately preserves every existing avatar. */
 export const BotAvatar = memo(function BotAvatar(props: BotAvatarProps) {
   if (usesLogoAvatar(props)) {
-    return <RakazoBotAvatar {...props} />;
+    return <AppBotAvatar {...props} />;
   }
   return <LegacyBotAvatar {...props} />;
 });
 
-function RakazoBotAvatar({
+function AppBotAvatar({
   color,
   identity,
   size = 54,

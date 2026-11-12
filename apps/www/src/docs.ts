@@ -17,7 +17,7 @@ export const DOCS_NAV = [
     ],
   },
   {
-    title: "Using Rakazo",
+    title: "Using App",
     pages: [
       { slug: "integrations", label: "Connect apps" },
       { slug: "routines", label: "Routines" },
