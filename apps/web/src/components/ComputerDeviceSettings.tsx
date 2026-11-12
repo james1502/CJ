@@ -11,7 +11,9 @@ import { SettingsGroup, SettingsRow } from "./SettingsRows";
 type ThisComputer = { allowed: boolean; setAllowed: (allowed: boolean) => Promise<unknown> };
 
 /** A remote server pairs this computer; the app-managed local stack runs bots on it directly. */
-async function thisComputerAccess(desktop: RakazoDesktop | undefined): Promise<ThisComputer | null> {
+async function thisComputerAccess(
+  desktop: RakazoDesktop | undefined,
+): Promise<ThisComputer | null> {
   const device = desktop?.device;
   const paired = await device?.state().catch(() => null);
   if (device && paired) return { allowed: paired.allowed, setAllowed: device.setAllowed };

@@ -520,7 +520,8 @@ test("the desktop never exposes server administration or account impersonation",
   expect(
     await main.evaluate(
       () =>
-        "localSettings" in (window as typeof window & { rakazoDesktop: RakazoDesktop }).rakazoDesktop,
+        "localSettings" in
+        (window as typeof window & { rakazoDesktop: RakazoDesktop }).rakazoDesktop,
     ),
   ).toBe(false);
   expect(
