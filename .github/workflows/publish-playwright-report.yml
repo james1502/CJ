@@ -102,8 +102,8 @@ jobs:
           if [[ "$count" == "1" ]]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
             echo "id=$(jq -r --arg name "$ARTIFACT_NAME" '.artifacts[] | select(.name == $name and .expired == false) | .id' <<<"$artifacts")" >> "$GITHUB_OUTPUT"
-          elif [[ "$count" == "0" && "$PLAYWRIGHT_JOB_RESULT" == "timed_out" ]]; then
-            echo "::warning::The timed-out Playwright job ended before it uploaded an artifact. Publishing an empty gallery."
+          elif [[ "$count" == "0" && ( "$PLAYWRIGHT_JOB_RESULT" == "timed_out" || "$PLAYWRIGHT_JOB_RESULT" == "failure" ) ]]; then
+            echo "::warning::The Playwright job ended ($PLAYWRIGHT_JOB_RESULT) before it uploaded an artifact. Publishing an empty gallery."
             echo "exists=false" >> "$GITHUB_OUTPUT"
           else
             echo "Expected exactly one unexpired Playwright artifact; found $count." >&2
